@@ -7,8 +7,9 @@ access to container / object definitions for modules.
 
 class vecXY:
     """A simple two dimensional vector container"""
-    __vecX = 0.00
-    __vecY = 0.00
+    def __init__(self, nXY=[0.0, 0.0]):
+        self.__vecX = nXY[0]
+        self.__vecY = nXY[1]
 
     def set(self, nXY=[0.0, 0.0]):
         """Set the velocity values"""
@@ -31,20 +32,21 @@ class vecXY:
 
 class PointCharge:
     """Point charge class definition, used in calculation/simulation/rendering"""
-    # Attributes
-    pMass = 0.00  # Point Mass
-    pCharge = 0.00  # Point Charge
-    pRadius = 5.00  # Point Radius, should remain constant
-    pPos = vecXY()  # Position vector
-    pVel = vecXY()  # Velocity vector
-    pAcc = vecXY()  # Acceleration vector
-
-    pNetF = vecXY()  # Net force vector
-    pIdvF = []  # Individual force vectors
-
     # Methods
     def __init__(self, jsonData=None):
         """Point object init, if JSON point data is provided, populate, else use defaults"""
+
+        # Attributes
+        self.pMass = 0.00  # Point Mass
+        self.pCharge = 0.00  # Point Charge
+        self.pRadius = 5.00  # Point Radius, should remain constant
+        self.pPos = vecXY()  # Position vector
+        self.pVel = vecXY()  # Velocity vector
+        self.pAcc = vecXY()  # Acceleration vector
+
+        self.pNetF = vecXY()  # Net force vector
+        self.pIdvF = []  # Individual force vectors
+
         if jsonData != None:
             # Populate object with data from JSON DOM.
             self.pMass = jsonData["mass"]
