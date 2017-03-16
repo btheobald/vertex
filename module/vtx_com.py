@@ -44,7 +44,7 @@ class PointCharge:
 
     # Methods
     def __init__(self, jsonData=None):
-        """Point object init, if JSON data is provided, populate, else use defaults"""
+        """Point object init, if JSON point data is provided, populate, else use defaults"""
         if jsonData != None:
             # Populate object with data from JSON DOM.
             self.pMass = jsonData["mass"]
