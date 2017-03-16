@@ -8,15 +8,15 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 # IMPORTS
-import vtx_pcom
-import vtx_calc
-import vtx_draw
-import vtx_file
-import vtx_ifce
+from module import vtx_calc
+from module import vtx_draw
+from module import vtx_file
+from module import vtx_gui
+from module import vtx_com
 
 # TEST MODULES
 # TODO: Remove from final version.
-import vtx_test
+from tests import tests_core
 
-vtx_test.module_test()
+tests_core.module_test()
 

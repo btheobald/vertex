@@ -7,4 +7,4 @@ the simulation onto the main Tkinter Canvas or other drawing libraries.
 Keep cyclic imports to minimum, ie write in a way where modules are not interlinked.
 """
 
-import vtx_pcom
+import vtx_com
