@@ -8,6 +8,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 # IMPORTS
+import vtx_pcom
 import vtx_calc
 import vtx_draw
 import vtx_file
