@@ -46,6 +46,7 @@ def iterateDynamicSim(simConf, pointData=[vtx_com.PointCharge()]):
     for n in range(len(pointData)): # x
         pointData[n].updatePos(simConf["dTime"])
 
+    # TODO: collisions
     calculateForces(simConf, pointData) # a
 
     for n in range(len(pointData)): # 1/2v
