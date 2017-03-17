@@ -59,7 +59,7 @@ class PointCharge:
         """Update velocity based on current instantaneous acceleration and provided sim delta time"""
         addX = self.pAcc.get(0) * deltaTime
         addY = self.pAcc.get(1) * deltaTime
-        self.pPos.sum([addX, addY])
+        self.pVel.sum([addX, addY])
 
     def updatePos(self, deltaTime):
         """Update velocity based on current instantaneous acceleration and provided sim delta time"""
@@ -75,8 +75,9 @@ class PointCharge:
 
     def updateNetF(self):
         """Sum the current net force based on individual forces"""
+        self.pNetF.set([0.0, 0.0])
         for i in range(len(self.pIdvF)):
-            self.pNetF.sum(self.pIdvF[0].get())
+            self.pNetF.sum(self.pIdvF[i].get())
 
     def getJSON(self):
         """Returns the JSON dictionary for save functionality"""
