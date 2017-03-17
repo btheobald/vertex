@@ -13,5 +13,5 @@ import Tkinter
 import vtx_com
 
 def initWindow():
-    handle = Tkinter.tk
+    handle = Error
     return handle
