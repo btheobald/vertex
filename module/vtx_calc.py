@@ -26,7 +26,7 @@ def calculateForces(simConf, pointData=[vtx_com.PointCharge()]):
             dMag = math.sqrt(dVec[0]**2 + dVec[1]**2)
 
             # Vector force calculation
-            forcePreVec = (1/simConf["rPerm"]) * ((a.pCharge * b.pCharge) / dMag ** 3)
+            forcePreVec = (1/simConf["rPerm"])*((a.pCharge*b.pCharge)/dMag**3)
             forceX = -forcePreVec * dVec[0]
             forceY = -forcePreVec * dVec[1]
 
@@ -37,3 +37,16 @@ def calculateForces(simConf, pointData=[vtx_com.PointCharge()]):
         # Update net properties once all individual forces are given.
         pointData[a].updateNetF()
         pointData[a].updateAcc()
+
+def iterateDynamicSim(simConf, pointData=[vtx_com.PointCharge()]):
+    """Perform leapfrog integration of simulation at time step."""
+    for n in range(len(pointData)): # 1/2v
+        pointData[n].updateVel(simConf["dTime"]/2)
+
+    for n in range(len(pointData)): # x
+        pointData[n].updatePos(simConf["dTime"])
+
+    calculateForces(simConf, pointData) # a
+
+    for n in range(len(pointData)): # 1/2v
+        pointData[n].updateVel(simConf["dTime"]/2)
