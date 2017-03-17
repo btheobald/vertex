@@ -19,11 +19,11 @@ Functions will be added in a modular fashion to files inside the module package,
 ### Unit Testing ###
 If you are writing code, you should be writing unit tests, create your test in a python file with a sensible name inside of tests, preferably with the name of the module being tested and some extra identifier. 
 
-Example: *tests_file_simpleload.py* is used to check that a valid JSON file loads correctly, it imports the vtx_file module and is run as a program as itself in order to run the test. It performs basic checks as to what its result is and the expected result. (provided by the developer.) 
+Example: *tests_file.py* is used to check file methods, it imports the vtx_file module and is run as a program as itself in order to run the test. 
 
 If the test passes it outputs PASS, if it FAILS then still commit your code (and the test.) but note in comments and the commit message that the test fails.
 
 ### Avoidance of Cyclic Imports ###
 In order to maintain a good structure, the modules should not contain main programs themselves, but instead should pass back any objects likely to be needed to the calling function, which should be vtx_core.
 
-Module files should not import modules other than vtx_com as this contains data structure definitons used throughout the program. This is to help prevent cyclic imports which are considered to be bad practice and lead to difficult to follow code.
+Module files should not import modules other than vtx_com as this contains data structure definitions used throughout the program. This is to help prevent cyclic imports which are considered to be bad practice and lead to difficult to follow code.
