@@ -20,6 +20,10 @@ def loadJSONData(file):
 
     return jsonData
 
+def saveJSONData(jsonData):
+    """Save a JSON text file with the provided DOM tree."""
+    # TODO: Expand stub
+
 def initPoints(jsonData):
     """Init the points, convert jsonData to objects."""
     jsonPointSet = jsonData["save"]["point"]
