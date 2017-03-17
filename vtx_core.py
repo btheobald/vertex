@@ -16,7 +16,8 @@ from module import vtx_draw
 from module import vtx_gui
 from module import vtx_file
 
-# TODO: Initialise Tkinter Window
-# Initially write basic setup in this file but migrate to module/vtx_gui.py.
-# TODO: Write GUI init function in vtx_gui, call here. Return window handler.
-# TODO: Add in program main loop
+main = vtx_gui.initWindow()
+
+while True:
+    main.update_idletasks()
+    main.update()
