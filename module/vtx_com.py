@@ -67,6 +67,11 @@ class PointCharge:
         addY = self.pVel.get(1) * deltaTime
         self.pPos.sum([addX, addY])
 
+    def updateAcc(self):
+        aX = self.pNetF.get(0) / self.pMass
+        aY = self.pNetF.get(1) / self.pMass
+        self.pAcc.set([aX,aY])
+
     def updateNetF(self, deltaTime):
         """Sum the current net force based on individual forces"""
         for i in range(len(self.pIdvF)):
