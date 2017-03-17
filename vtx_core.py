@@ -19,3 +19,4 @@ from module import vtx_file
 # TODO: Initialise Tkinter Window
 # Initially write basic setup in this file but migrate to module/vtx_gui.py.
 # TODO: Write GUI init function in vtx_gui, call here. Return window handler.
+# TODO: Add in program main loop
