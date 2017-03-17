@@ -33,15 +33,15 @@ class vecXY:
 class PointCharge:
     """Point charge class definition, used in calculation/simulation/rendering"""
     # Methods
-    def __init__(self, jsonData=None):
+    def __init__(self, jsonData=None, _m=0.00, _c=0.00, _p=vecXY(), _v=vecXY()):
         """Point object init, if JSON point data is provided, populate, else use defaults"""
 
         # Attributes
-        self.pMass = 0.00  # Point Mass
-        self.pCharge = 0.00  # Point Charge
+        self.pMass = _m  # Point Mass
+        self.pCharge = _c  # Point Charge
         self.pRadius = 5.00  # Point Radius, should remain constant
-        self.pPos = vecXY()  # Position vector
-        self.pVel = vecXY()  # Velocity vector
+        self.pPos = _p  # Position vector
+        self.pVel = _v  # Velocity vector
         self.pAcc = vecXY()  # Acceleration vector
 
         self.pNetF = vecXY()  # Net force vector
