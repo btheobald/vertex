@@ -12,6 +12,23 @@ import Tkinter
 
 import vtx_com
 
+
 def initWindow():
-    handle = Error
+    """Call to init Tkinter window"""
+    handle = Tkinter.Tk()
     return handle
+
+def initMenuBar(_handle):
+    """Add menu bar to passed window"""
+    item = None
+    return item
+
+def initCanvas(_handle):
+    """Add canvas to passed window"""
+    item = None
+    return item
+
+def initPropertiesPane(_handle):
+    """Add properties pane to window"""
+    item = None
+    return item
