@@ -54,3 +54,7 @@ def iterateDynamicSim(simConf, pointData=[vtx_com.PointCharge()]):
 
     for n in range(len(pointData)): # 1/2v
         pointData[n].updateVel(simConf["dTime"]/2)
+
+#TODO: Add calculation core for view mode calculations.
+# - Field vectors
+# - Field lines

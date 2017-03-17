@@ -8,7 +8,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 # EXTERNAL LIBRARIES
-from Tkinter import *
+import Tkinter
 
 # INTERNAL MODULES
 from module import vtx_calc
@@ -17,6 +17,21 @@ from module import vtx_gui
 from module import vtx_file
 
 main = vtx_gui.initWindow()
+vMenuBar = vtx_gui.initMenuBar()
+vCanvas = vtx_gui.initCanvas()
+vPane = vtx_gui.initPropertiesPane()
+
+# TODO: Setup window, menubar, canvas, pane
+
+"""
+Init program here
+Setup simulation state variables, starting empty
+Sent sim state to calculation/simulation core
+Obtain results of calculation/simulation if view mode enabled
+Send results of calculation/simulation to draw module
+Check for any change to inputs if simulation is in static mode
+Frame timer collection
+"""
 
 while True:
     main.update_idletasks()

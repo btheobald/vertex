@@ -12,23 +12,26 @@ import Tkinter
 
 import vtx_com
 
+# TODO: Get window shell setup
 
 def initWindow():
     """Call to init Tkinter window"""
     handle = Tkinter.Tk()
     return handle
 
-def initMenuBar(_handle=Tkinter.Tk(None)):
+def initMenuBar(_handle):
     """Add menu bar to passed window"""
     item = None
     return item
 
-def initCanvas(_handle=Tkinter.Tk(None)):
+def initCanvas(_handle):
     """Add canvas to passed window"""
     item = None
     return item
 
-def initPropertiesPane(_handle=Tkinter.Tk(None)):
+def initPropertiesPane(_handle):
     """Add properties pane to window"""
     item = None
     return item
+
+# TODO: Get inputs/outputs linked to actual objects

@@ -8,3 +8,5 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 import vtx_com
+
+# TODO: implement Tkinter draw functions based on data collected from calculation.
