@@ -68,6 +68,7 @@ class PointCharge:
         self.pPos.sum([addX, addY])
 
     def updateAcc(self):
+        """Update instantaneous acceleration using current net force"""
         aX = self.pNetF.get(0) / self.pMass
         aY = self.pNetF.get(1) / self.pMass
         self.pAcc.set([aX,aY])
