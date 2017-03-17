@@ -18,17 +18,17 @@ def initWindow():
     handle = Tkinter.Tk()
     return handle
 
-def initMenuBar(_handle):
+def initMenuBar(_handle=Tkinter.Tk(None)):
     """Add menu bar to passed window"""
     item = None
     return item
 
-def initCanvas(_handle):
+def initCanvas(_handle=Tkinter.Tk(None)):
     """Add canvas to passed window"""
     item = None
     return item
 
-def initPropertiesPane(_handle):
+def initPropertiesPane(_handle=Tkinter.Tk(None)):
     """Add properties pane to window"""
     item = None
     return item
