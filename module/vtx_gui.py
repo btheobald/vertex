@@ -8,4 +8,10 @@ integration with the program runtime.
 Keep cyclic imports to minimum, ie write in a way where modules are not interlinked.
 """
 
+import Tkinter
+
 import vtx_com
+
+def initWindow():
+    handle = None
+    return handle
