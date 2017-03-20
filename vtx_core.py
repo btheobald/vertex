@@ -15,7 +15,7 @@ from module import vtx_calc
 from module import vtx_draw
 from module import vtx_gui
 from module import vtx_file
-from modlue import vtx_com
+from module import vtx_com
 
 main = vtx_gui.initWindow()
 vMenuBar = vtx_gui.initMenuBar()
