@@ -15,6 +15,7 @@ from module import vtx_calc
 from module import vtx_draw
 from module import vtx_gui
 from module import vtx_file
+from modlue import vtx_com
 
 main = vtx_gui.initWindow()
 vMenuBar = vtx_gui.initMenuBar()
@@ -32,6 +33,11 @@ Send results of calculation/simulation to draw module
 Check for any change to inputs if simulation is in static mode
 Frame timer collection
 """
+
+points = [
+    vtx_com.PointCharge(_m=10, _c=0.1, _p=vtx_com.vecXY([100, 200])),
+    vtx_com.PointCharge(_m= 1, _c=0.1, _p=vtx_com.vecXY([300, 150]) , _v=vtx_com.vecXY([-0.1, 0.030])),
+]
 
 while True:
     main.update_idletasks()
