@@ -40,5 +40,9 @@ points = [
 ]
 
 while True:
+
+    # How we want do to draw particles
+    #vtx_calc.drawPoints(vCanvas, points)
+
     main.update_idletasks()
     main.update()
