@@ -8,7 +8,8 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 # EXTERNAL LIBRARIES
-import Tkinter
+from Tkinter import *
+from time import sleep
 
 # INTERNAL MODULES
 from module import vtx_calc
@@ -17,32 +18,28 @@ from module import vtx_gui
 from module import vtx_file
 from module import vtx_com
 
-main = vtx_gui.initWindow()
-vMenuBar = vtx_gui.initMenuBar()
-vCanvas = vtx_gui.initCanvas()
-vPane = vtx_gui.initPropertiesPane()
+conf = {"rPerm":0.10, "dTime":1.00, "sim":"dynamic", "draw":"fieldVect", "points":0}
 
-# TODO: Setup window, menubar, canvas, pane
-
-"""
-Init program here
-Setup simulation state variables, starting empty
-Sent sim state to calculation/simulation core
-Obtain results of calculation/simulation if view mode enabled
-Send results of calculation/simulation to draw module
-Check for any change to inputs if simulation is in static mode
-Frame timer collection
-"""
-
+"""Init of point set"""
 points = [
     vtx_com.PointCharge(_m=10, _c=0.1, _p=vtx_com.vecXY([100, 200])),
     vtx_com.PointCharge(_m= 1, _c=0.1, _p=vtx_com.vecXY([300, 150]) , _v=vtx_com.vecXY([-0.1, 0.030])),
 ]
 
+"""Get root window handle"""
+rtn = vtx_gui.initWindow()
+
+root = rtn[0]
+menu = rtn[1]
+display = rtn[2]
+property = rtn[3]
+
 while True:
+    sleep(0.001)
+    display.delete(ALL)
 
-    # How we want do to draw particles
-    #vtx_calc.drawPoints(vCanvas, points)
+    vtx_draw.drawPoints(display, points)
+    vtx_calc.iterateDynamicSim(conf, points)
 
-    main.update_idletasks()
-    main.update()
+    root.update_idletasks()
+    root.update()
