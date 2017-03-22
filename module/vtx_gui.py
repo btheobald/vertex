@@ -124,9 +124,6 @@ def _initPropertiesPane(_handle):
     nPointsLabel.grid(column=0, row=2, padx=10, pady=5, sticky="W")
     nPointsEntry.grid(column=1, row=2, padx=5, pady=5, sticky="W")
 
-    clearButton = Button(simConfig, text="Clear")
-    clearButton.grid(column=0, columnspan=2, row=3, pady=5, padx=10, sticky="EW")
-
     # POINT PANE
     # Point Select(Spinbox of range(len(pointData))
     # Mass (Spinbox)
@@ -142,7 +139,7 @@ def _initPropertiesPane(_handle):
 def updateConfig(conf={}):
     conf["rPerm"] = float(uiVal["rPerm"].get())
     conf["dTime"] = float(uiVal["dTime"].get())
-    uiVal["nPoints"] = str(conf["nPoints"])
+    uiVal["nPoints"].set(str(conf["nPoints"]))
     conf["mSim"] = modes["mSim"].get()
     conf["mView"] = modes["mView"].get()
 

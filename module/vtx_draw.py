@@ -22,7 +22,9 @@ def drawPoints(canvasObj, pointData):
     for n in range(len(pointData)):
         if pointData[n].pCharge > 0:
             fill = "orangeRed4"
+            line = "red"
         else:
             fill = "deepSkyBlue3"
+            line = "cyan"
 
-        _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline="grey", width=1)
+        _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline=line, width=1)
