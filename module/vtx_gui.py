@@ -68,7 +68,7 @@ def _initMenuBar(_handle):
     filemenu.add_command(label="Save")
     filemenu.add_command(label="Save as")
     filemenu.add_separator()
-    filemenu.add_command(label="Exit", command=_handle.quit)
+    filemenu.add_command(label="Exit")
 
     viewmenu = Menu(menubar, tearoff=0)
     menubar.add_cascade(label="View", menu=viewmenu)
@@ -93,6 +93,7 @@ def _initMenuBar(_handle):
     aboutmenu.add_command(label="Credits")
 
     _handle.config(menu=menubar)
+    return menubar
 
 def _initCanvas(_handle):
     """Add canvas to passed window"""
@@ -136,6 +137,7 @@ def _initPropertiesPane(_handle):
     # Force (Spinbox * 2, Non-Editable)
 
     property = [simConfig, pointConfig]
+    return property
 
 def updateConfig(conf={}):
     conf["rPerm"] = float(uiVal["rPerm"].get())

@@ -17,6 +17,7 @@ def loadJSONData(file):
     """Load in a JSON file into a DOM tree and return"""
     with open(file) as saveFile:
         jsonData = json.load(saveFile)
+    saveFile.close()
 
     return jsonData
 
@@ -37,6 +38,10 @@ def saveJSONData(file, pointData, confData):
         "point": point_list,
         "config": confDataTree
     }}
+
+    with open(file, "w") as saveFile:
+        json.dump(JSON_TREE, saveFile)
+    saveFile.close()
     return JSON_TREE
 
 
