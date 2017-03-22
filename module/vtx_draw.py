@@ -7,8 +7,9 @@ the simulation onto the main Tkinter Canvas or other drawing libraries.
 Keep cyclic imports to minimum, ie write in a way where modules are not interlinked.
 """
 
-import vtx_com
-from Tkinter import *
+
+from module import vtx_com
+from tkinter import *
 
 # TODO: implement Tkinter draw functions based on data collected from calculation.
 

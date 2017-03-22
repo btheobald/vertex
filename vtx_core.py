@@ -8,7 +8,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 # EXTERNAL LIBRARIES
-from Tkinter import *
+from tkinter import *
 from time import sleep
 
 # INTERNAL MODULES

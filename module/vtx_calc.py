@@ -9,7 +9,8 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 from math import *
-import vtx_com
+
+from module import vtx_com
 
 def calculateVecDist(pointData=[vtx_com.PointCharge()], a=0, b=0):
     """Calculate the vector distance between two points"""

@@ -1,6 +1,7 @@
 from module import vtx_file
 from module import vtx_com
 
+conf = {"rPerm":0.10, "dTime":2.00, "sim":"dynamic", "draw":"fieldVect", "points":0}
 # Test load JSON point data and check resulting objects.
 saveData = vtx_file.loadJSONData('test1.json')
 pointSet = vtx_file.initPoints(saveData)
@@ -22,4 +23,4 @@ if pointSet[1].pPos.get() == [300,200]:
 else:
     print "Point[1] position [300,200] data match: FAIL "
 
-print pointSet[1].getJSON()
+print vtx_file.saveJSONData(None,pointSet,conf)

@@ -11,9 +11,9 @@ integration with the program runtime.
 Keep cyclic imports to minimum, ie write in a way where modules are not interlinked.
 """
 
-from Tkinter import *
+from tkinter import *
 
-import vtx_com
+from module import vtx_com
 
 uiValues = {
     "rPerm" : None,

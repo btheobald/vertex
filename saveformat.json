@@ -1,6 +1,6 @@
 {
 "save": {
-	"sim_cfg": {
+	"config": {
 		"rel_per": 1.000,
 		"d_time": 0.010
 	},

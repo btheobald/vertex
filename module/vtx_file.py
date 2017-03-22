@@ -11,7 +11,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 import json
 
 # COMMON MODULE
-import vtx_com
+from module import vtx_com
 
 def loadJSONData(file):
     """Load in a JSON file into a DOM tree and return"""
@@ -23,6 +23,25 @@ def loadJSONData(file):
 def saveJSONData(file, pointData, confData):
     """Save a JSON text file with the provided DOM tree."""
     # TODO: Expand stub
+
+    point_list=[]
+
+    for i in range(len(pointData)):
+        point_list.append(pointData[i].getJSON())
+
+    confDataTree = {
+     "time": confData["d_time"],
+     "rel_perm": confData["rel_perm"]
+    }
+
+    JSON_TREE = {
+    "save":{
+        "point": point_list,
+        "config": confDataTree
+    }
+    }
+    return JSON_TREE
+
 
 def initPoints(jsonData):
     """Init the points, convert jsonData to objects."""
