@@ -75,12 +75,12 @@ def _initMenuBar(_handle):
     viewmenu.add_command(label="Origin Marker (B)", command=donothing)
     menubar.add_cascade(label="View", menu=viewmenu)
 
-    simmulationmenu = Menu(menubar, tearoff=0)
-    simmulationmenu.add_command(label="Static", command=donothing)
-    simmulationmenu.add_command(label="Dynamic", command=donothing)
-    simmulationmenu.add_command(label="Reset", command=donothing)
-    simmulationmenu.add_command(label="Clear", command=donothing)
-    menubar.add_cascade(label="Simmulation", menu=simmulationmenu)
+    simulationmenu = Menu(menubar, tearoff=0)
+    simulationmenu.add_command(label="Static", command=donothing)
+    simulationmenu.add_command(label="Dynamic", command=donothing)
+    simulationmenu.add_command(label="Reset", command=donothing)
+    simulationmenu.add_command(label="Clear", command=donothing)
+    menubar.add_cascade(label="Simulation", menu=simulationmenu)
 
     _handle.config(menu=menubar)
 
