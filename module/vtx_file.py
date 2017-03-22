@@ -22,7 +22,6 @@ def loadJSONData(file):
 
 def saveJSONData(file, pointData, confData):
     """Save a JSON text file with the provided DOM tree."""
-    # TODO: Expand stub
 
     point_list=[]
 

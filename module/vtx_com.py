@@ -8,40 +8,40 @@ access to container / object definitions for modules.
 class vecXY:
     """A simple two dimensional vector container"""
     def __init__(self, nXY=[0.0, 0.0]):
-        self.__vecX = nXY[0]
-        self.__vecY = nXY[1]
+        self._vecX = nXY[0]
+        self._vecY = nXY[1]
 
     def set(self, nXY=[0.0, 0.0]):
         """Set the velocity values"""
-        self.__vecX = nXY[0]
-        self.__vecY = nXY[1]
+        self._vecX = nXY[0]
+        self._vecY = nXY[1]
 
     def sum(self, sXY=[0.0,0.0]):
         """Sum onto the current velocity values, pass as set"""
-        self.__vecX += sXY[0]
-        self.__vecY += sXY[1]
+        self._vecX += sXY[0]
+        self._vecY += sXY[1]
 
     def get(self, sel=None):
         """Returns the current velocity, either in a set or individually [None, 0, 1]"""
         if (sel == None):
-          return [self.__vecX, self.__vecY]
+          return [self._vecX, self._vecY]
         elif sel == 0:
-          return self.__vecX
+          return self._vecX
         else:
-          return self.__vecY
+          return self._vecY
 
 class PointCharge:
     """Point charge class definition, used in calculation/simulation/rendering"""
     # Methods
-    def __init__(self, jsonData=None, _m=0.00, _c=0.00, _p=vecXY(), _v=vecXY()):
+    def __init__(self, jsonData=None, _m=1.00, _c=0.00, _p=[0.0,0.0], _v=[0.0,0.0]):
         """Point object init, if JSON point data is provided, populate, else use defaults"""
 
         # Attributes
         self.pMass = _m  # Point Mass
         self.pCharge = _c  # Point Charge
         self.pRadius = 5.00  # Point Radius, should remain constant
-        self.pPos = _p  # Position vector
-        self.pVel = _v  # Velocity vector
+        self.pPos = vecXY(_p)  # Position vector
+        self.pVel = vecXY(_v)  # Velocity vector
         self.pAcc = vecXY()  # Acceleration vector
 
         self.pNetF = vecXY()  # Net force vector

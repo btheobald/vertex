@@ -15,21 +15,42 @@ from Tkinter import *
 
 from module import vtx_com
 
-uiValues = {
-    "rPerm": "0.1",
-    "dTime": "1.0",
-    "count": "0"
-}
+uiVal = dict()
+modes = dict()
 
-def donothing():
-    filewin = Toplevel()
-    button = Button(filewin, text='Do nothing')
-    button.pack()
+VIEWMODES = [
+    ("Clear",         0),
+    ("Force Vectors", 1),
+    ("Field Vectors", 2),
+    ("Field Lines",   3)
+]
+
+SIMMODES = [
+    ("Static",  0),
+    ("Dynamic", 1)
+]
+
+def setUiDefaults():
+    uiVal["dTime"].set("1.0")
+    uiVal["rPerm"].set("0.1")
+    uiVal["nPoints"].set("0")
+
+    modes["mSim"].set(0)
+    modes["mView"].set(0)
 
 def initWindow():
     """Call to init Tkinter window"""
     root = Tk()
     root.resizable(width=False, height=False)
+
+    uiVal.update({"dTime" : StringVar(root)})
+    uiVal.update({"rPerm" : StringVar(root)})
+    uiVal.update({"nPoints" : StringVar(root)})
+
+    modes.update({"mSim" : IntVar(root)})
+    modes.update({"mView" : IntVar(root)})
+
+    setUiDefaults()
 
     menu = _initMenuBar(root)
     display = _initCanvas(root)
@@ -41,37 +62,37 @@ def _initMenuBar(_handle):
     """Add menu bar to passed window"""
     menubar = Menu(_handle)
     filemenu = Menu(menubar, tearoff=0)
-    filemenu.add_command(label="New", command=donothing)
-    filemenu.add_command(label="Open", command=donothing)
-    filemenu.add_command(label="Save", command=donothing)
-    filemenu.add_command(label="Save as...", command=donothing)
+    menubar.add_cascade(label="File", menu=filemenu)
+    filemenu.add_command(label="New")
+    filemenu.add_command(label="Open")
+    filemenu.add_command(label="Save")
+    filemenu.add_command(label="Save as")
     filemenu.add_separator()
     filemenu.add_command(label="Exit", command=_handle.quit)
-    menubar.add_cascade(label="File", menu=filemenu)
-
-    helpmenu = Menu(menubar, tearoff=0)
-    helpmenu.add_command(label="Version info", command=donothing)
-    helpmenu.add_command(label="Credits", command=donothing)
-    menubar.add_cascade(label="Help", menu=helpmenu)
 
     viewmenu = Menu(menubar, tearoff=0)
-    viewmenu.add_command(label="Clear(0)", command=donothing)
-    viewmenu.add_command(label="Field Vectors(1)", command=donothing)
-    viewmenu.add_command(label="Field Lines(2)", command=donothing)
-    viewmenu.add_command(label="Force Vectors(3)", command=donothing)
-    viewmenu.add_command(label="Charge Values(A)", command=donothing)
-    viewmenu.add_command(label="Origin Marker (B)", command=donothing)
     menubar.add_cascade(label="View", menu=viewmenu)
+    for label, val in VIEWMODES:
+        viewmenu.add_radiobutton(label=label, value=val, variable=modes["mView"])
+    viewmenu.add_separator()
+    viewmenu.add_command(label="Charges")
+    viewmenu.add_command(label="Origin")
 
-    simulationmenu = Menu(menubar, tearoff=0)
-    simulationmenu.add_command(label="Static", command=donothing)
-    simulationmenu.add_command(label="Dynamic", command=donothing)
-    simulationmenu.add_command(label="Reset", command=donothing)
-    simulationmenu.add_command(label="Clear", command=donothing)
-    menubar.add_cascade(label="Simulation", menu=simulationmenu)
+    modemenu = Menu(menubar, tearoff=0)
+    menubar.add_cascade(label="Mode", menu=modemenu)
+    for label, val in SIMMODES:
+        modemenu.add_radiobutton(label=label, value=val, variable=modes["mSim"])
+    modemenu.add_separator()
+    modemenu.add_command(label="Reset")
+    modemenu.add_command(label="Clear")
+
+    aboutmenu = Menu(menubar, tearoff=0)
+    menubar.add_cascade(label="About", menu=aboutmenu)
+    aboutmenu.add_command(label="Help")
+    aboutmenu.add_command(label="Version info")
+    aboutmenu.add_command(label="Credits")
 
     _handle.config(menu=menubar)
-
 
 def _initCanvas(_handle):
     """Add canvas to passed window"""
@@ -88,17 +109,17 @@ def _initPropertiesPane(_handle):
 
     # SIMULATION PANE
     rPermLabel = Label(simConfig, text="Relative ε")
-    rPermEntry = Spinbox(simConfig, from_=0.01, to=1, increment=0.01, textvariable=uiValues["rPerm"], width=4)
+    rPermEntry = Spinbox(simConfig, from_=0.01, to=1, increment=0.01, textvariable=uiVal["rPerm"], width=4)
     rPermLabel.grid(column=0, row=0, padx=10, pady=5, sticky="W")
     rPermEntry.grid(column=1, row=0, pady=5, sticky="E")
 
     dTimeLabel = Label(simConfig, text="Time Step")
-    dTimeEntry = Spinbox(simConfig, from_=0, to=10, increment=0.01, textvariable=uiValues["dTime"], width=4)
+    dTimeEntry = Spinbox(simConfig, from_=0, to=10, increment=0.01, textvariable=uiVal["dTime"], width=4)
     dTimeLabel.grid(column=0, row=1, padx=10, pady=5, sticky="W")
     dTimeEntry.grid(column=1, row=1, pady=5, sticky="E")
 
     nPointsLabel = Label(simConfig, text="# Points")
-    nPointsEntry = Entry(simConfig, textvariable=uiValues["count"], width=3)
+    nPointsEntry = Entry(simConfig, textvariable=uiVal["nPoints"], width=3)
     nPointsLabel.grid(column=0, row=2, padx=10, pady=5, sticky="W")
     nPointsEntry.grid(column=1, row=2, padx=5, pady=5, sticky="W")
 
@@ -117,11 +138,11 @@ def _initPropertiesPane(_handle):
     property = [simConfig, pointConfig]
 
 def updateConfig(conf={}):
-    conf["rPerm"] = float(uiValues["rPerm"])
-    conf["dTime"] = float(uiValues["dTime"])
-    uiValues["count"] = str(conf["count"])
-    #conf["sim"] = self.simMode.get()
-    #conf["draw"] = self.viewMode.get()
+    conf["rPerm"] = float(uiVal["rPerm"].get())
+    conf["dTime"] = float(uiVal["dTime"].get())
+    uiVal["nPoints"] = str(conf["nPoints"])
+    conf["sim"] = modes["mSim"].get()
+    conf["draw"] = modes["mView"].get()
 
 def updatePoints(pointData):
     return None

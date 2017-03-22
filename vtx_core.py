@@ -18,12 +18,18 @@ from module import vtx_gui
 from module import vtx_file
 from module import vtx_com
 
-conf = {"rPerm":0.10, "dTime":2.00, "sim":"dynamic", "draw":"fieldVect", "count":0}
+conf = {
+    "rPerm":0.10,
+    "dTime":2.00,
+    "nPoints":0,
+    "sim":0,
+    "draw":0
+}
 
 """Init of point set"""
 points = [
-    vtx_com.PointCharge(_m=10, _c=0.1, _p=vtx_com.vecXY([100, 200])),
-    vtx_com.PointCharge(_m= 1, _c=0.1, _p=vtx_com.vecXY([300, 150]) , _v=vtx_com.vecXY([-0.1, 0.030])),
+    vtx_com.PointCharge(_m=10, _c=0.1, _p=[100, 200]),
+    vtx_com.PointCharge(_m= 1, _c=0.1, _p=[300, 150], _v=[-0.1, 0.03])
 ]
 
 """Get root window handle"""
