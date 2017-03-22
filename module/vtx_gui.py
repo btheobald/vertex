@@ -143,8 +143,8 @@ def updateConfig(conf={}):
     conf["rPerm"] = float(uiVal["rPerm"].get())
     conf["dTime"] = float(uiVal["dTime"].get())
     uiVal["nPoints"] = str(conf["nPoints"])
-    conf["sim"] = modes["mSim"].get()
-    conf["draw"] = modes["mView"].get()
+    conf["mSim"] = modes["mSim"].get()
+    conf["mView"] = modes["mView"].get()
 
 def updatePoints(pointData):
     return None
