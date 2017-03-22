@@ -49,6 +49,7 @@ class PointCharge:
 
         if jsonData != None:
             # Populate object with data from JSON DOM.
+            print jsonData
             self.pMass = jsonData["mass"]
             self.pCharge = jsonData["charge"]
             self.pPos.set(jsonData["pos"])
@@ -81,6 +82,10 @@ class PointCharge:
 
     def getJSON(self):
         """Returns the JSON dictionary for save functionality"""
-        #TODO: Expand stub
-        #TODO: Write cyclic test to check result is same as input.
-
+        rtn = {
+            "mass" : self.pMass,
+            "charge" : self.pCharge,
+            "pos" : self.pPos.get(),
+            "vel" : self.pVel.get()
+        }
+        return rtn
