@@ -57,28 +57,30 @@ def _initMenuBar(_handle):
     filemenu.add_command(label="Open", command=donothing)
     filemenu.add_command(label="Save", command=donothing)
     filemenu.add_command(label="Save as...", command=donothing)
-    filemenu.add_command(label="Close", command=donothing)
-
     filemenu.add_separator()
-
     filemenu.add_command(label="Exit", command=_handle.quit)
     menubar.add_cascade(label="File", menu=filemenu)
-    editmenu = Menu(menubar, tearoff=0)
-    editmenu.add_command(label="Undo", command=donothing)
 
-    editmenu.add_separator()
-
-    editmenu.add_command(label="Cut", command=donothing)
-    editmenu.add_command(label="Copy", command=donothing)
-    editmenu.add_command(label="Paste", command=donothing)
-    editmenu.add_command(label="Delete", command=donothing)
-    editmenu.add_command(label="Select All", command=donothing)
-
-    menubar.add_cascade(label="Edit", menu=editmenu)
     helpmenu = Menu(menubar, tearoff=0)
-    helpmenu.add_command(label="Help Index", command=donothing)
-    helpmenu.add_command(label="About...", command=donothing)
+    helpmenu.add_command(label="Version info", command=donothing)
+    helpmenu.add_command(label="Credits", command=donothing)
     menubar.add_cascade(label="Help", menu=helpmenu)
+
+    viewmenu = Menu(menubar, tearoff=0)
+    viewmenu.add_command(label="Clear(0)", command=donothing)
+    viewmenu.add_command(label="Field Vectors(1)", command=donothing)
+    viewmenu.add_command(label="Field Lines(2)", command=donothing)
+    viewmenu.add_command(label="Force Vectors(3)", command=donothing)
+    viewmenu.add_command(label="Charge Values(A)", command=donothing)
+    viewmenu.add_command(label="Origin Marker (B)", command=donothing)
+    menubar.add_cascade(label="View", menu=viewmenu)
+
+    simmulationmenu = Menu(menubar, tearoff=0)
+    simmulationmenu.add_command(label="Static", command=donothing)
+    simmulationmenu.add_command(label="Dynamic", command=donothing)
+    simmulationmenu.add_command(label="Reset", command=donothing)
+    simmulationmenu.add_command(label="Clear", command=donothing)
+    menubar.add_cascade(label="Simmulation", menu=simmulationmenu)
 
     _handle.config(menu=menubar)
 
