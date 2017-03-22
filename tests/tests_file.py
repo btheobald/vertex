@@ -21,3 +21,5 @@ if pointSet[1].pPos.get() == [300,200]:
     print "Point[1] position [300,200] data match: PASS"
 else:
     print "Point[1] position [300,200] data match: FAIL "
+
+print pointSet[1].getJSON()

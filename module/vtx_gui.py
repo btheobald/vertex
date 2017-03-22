@@ -128,7 +128,7 @@ def _initPropertiesPane(_handle):
 
     property = [simConfig, pointConfig]
 
-def updateConfig(conf={}, ):
+def updateConfig(conf={}):
     conf["rPerm"] = float(uiValues["rPerm"])
     conf["dTime"] = float(uiValues["dTime"])
     uiValues["count"] = set(str(conf["count"]))

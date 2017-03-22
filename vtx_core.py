@@ -18,7 +18,7 @@ from module import vtx_gui
 from module import vtx_file
 from module import vtx_com
 
-conf = {"rPerm":0.10, "dTime":1.00, "sim":"dynamic", "draw":"fieldVect", "points":0}
+conf = {"rPerm":0.10, "dTime":2.00, "sim":"dynamic", "draw":"fieldVect", "points":0}
 
 """Init of point set"""
 points = [
@@ -40,6 +40,7 @@ while True:
 
     vtx_draw.drawPoints(display, points)
     vtx_calc.iterateDynamicSim(conf, points)
+    vtx_gui.updateConfig(conf)
 
     root.update_idletasks()
     root.update()

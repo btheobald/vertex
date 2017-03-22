@@ -20,7 +20,7 @@ def loadJSONData(file):
 
     return jsonData
 
-def saveJSONData(jsonData):
+def saveJSONData(file, pointData, confData):
     """Save a JSON text file with the provided DOM tree."""
     # TODO: Expand stub
 
