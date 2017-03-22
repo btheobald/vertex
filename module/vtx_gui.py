@@ -16,9 +16,9 @@ from Tkinter import *
 from module import vtx_com
 
 uiValues = {
-    "rPerm" : None,
-    "dTime" : None,
-    "count" : None
+    "rPerm": "0.1",
+    "dTime": "1.0",
+    "count": "0"
 }
 
 def donothing():
@@ -26,22 +26,10 @@ def donothing():
     button = Button(filewin, text='Do nothing')
     button.pack()
 
-def setDefaults(root):
-    uiValues = {
-        "rPerm": StringVar(root),
-        "dTime": StringVar(root),
-        "count": StringVar(root)
-    }
-
-    uiValues["rPerm"].set("0.1")
-    uiValues["dTime"].set("1.0")
-
 def initWindow():
     """Call to init Tkinter window"""
     root = Tk()
     root.resizable(width=False, height=False)
-
-    setDefaults(root)
 
     menu = _initMenuBar(root)
     display = _initCanvas(root)
@@ -131,7 +119,7 @@ def _initPropertiesPane(_handle):
 def updateConfig(conf={}):
     conf["rPerm"] = float(uiValues["rPerm"])
     conf["dTime"] = float(uiValues["dTime"])
-    uiValues["count"] = set(str(conf["count"]))
+    uiValues["count"] = str(conf["count"])
     #conf["sim"] = self.simMode.get()
     #conf["draw"] = self.viewMode.get()
 

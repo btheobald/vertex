@@ -30,16 +30,14 @@ def saveJSONData(file, pointData, confData):
         point_list.append(pointData[i].getJSON())
 
     confDataTree = {
-     "time": confData["d_time"],
-     "rel_perm": confData["rel_perm"]
+     "dTime": confData["dTime"],
+     "rPerm": confData["rPerm"]
     }
 
-    JSON_TREE = {
-    "save":{
+    JSON_TREE = { "save": {
         "point": point_list,
         "config": confDataTree
-    }
-    }
+    }}
     return JSON_TREE
 
 
@@ -47,8 +45,6 @@ def initPoints(jsonData):
     """Init the points, convert jsonData to objects."""
     jsonPointSet = jsonData["save"]["point"]
     objPointSet = []
-
-    # TODO: Parse for invalid data and log.
 
     for n in range(len(jsonPointSet)):
         objPointSet.append(vtx_com.PointCharge(jsonPointSet[n]))

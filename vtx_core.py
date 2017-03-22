@@ -18,7 +18,7 @@ from module import vtx_gui
 from module import vtx_file
 from module import vtx_com
 
-conf = {"rPerm":0.10, "dTime":2.00, "sim":"dynamic", "draw":"fieldVect", "points":0}
+conf = {"rPerm":0.10, "dTime":2.00, "sim":"dynamic", "draw":"fieldVect", "count":0}
 
 """Init of point set"""
 points = [
