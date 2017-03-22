@@ -8,5 +8,20 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 import vtx_com
+from Tkinter import *
 
 # TODO: implement Tkinter draw functions based on data collected from calculation.
+
+def _create_circle(canvas, cx, cy, r, **options):
+    """Simplify the drawing of constant radius objects, pass on options"""
+    canvas.create_oval(cx-r, cy-r, cx+r, cy+r, options)
+
+def drawPoints(canvasObj, pointData):
+    """Draw all points provided in data to provided canvas."""
+    for n in range(len(pointData)):
+        if pointData[n].pCharge > 0:
+            fill = "orangeRed4"
+        else:
+            fill = "deepSkyBlue3"
+
+        _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline="grey", width=1)

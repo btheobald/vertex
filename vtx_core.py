@@ -8,71 +8,38 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 # EXTERNAL LIBRARIES
-import Tkinter
+from Tkinter import *
+from time import sleep
 
 # INTERNAL MODULES
 from module import vtx_calc
 from module import vtx_draw
 from module import vtx_gui
 from module import vtx_file
+from module import vtx_com
 
-main = vtx_gui.initWindow()
-vMenuBar = vtx_gui.initMenuBar()
-vCanvas = vtx_gui.initCanvas()
-vPane = vtx_gui.initPropertiesPane()
+conf = {"rPerm":0.10, "dTime":1.00, "sim":"dynamic", "draw":"fieldVect", "points":0}
 
-# TODO: Setup window, menubar, canvas, pane
+"""Init of point set"""
+points = [
+    vtx_com.PointCharge(_m=10, _c=0.1, _p=vtx_com.vecXY([100, 200])),
+    vtx_com.PointCharge(_m= 1, _c=0.1, _p=vtx_com.vecXY([300, 150]) , _v=vtx_com.vecXY([-0.1, 0.030])),
+]
 
-from Tkinter import *
-def donothing():
-    filewin = Toplevel(root)
-    button = Button(filewin, text='Do nothing')
-    button.pack()
+"""Get root window handle"""
+rtn = vtx_gui.initWindow()
 
-root = Tk()
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="New", command=donothing)
-filemenu.add_command(label="Open", command=donothing)
-filemenu.add_command(label="Save", command=donothing)
-filemenu.add_command(label="Save as...", command=donothing)
-filemenu.add_command(label="Close", command=donothing)
-
-filemenu.add_separator()
-
-filemenu.add_command(label="Exit", command=root.quit)
-menubar.add_cascade(label="File", menu=filemenu)
-editmenu = Menu(menubar, tearoff=0)
-editmenu.add_command(label="Undo", command=donothing)
-
-editmenu.add_separator()
-
-editmenu.add_command(label="Cut", command=donothing)
-editmenu.add_command(label="Copy", command=donothing)
-editmenu.add_command(label="Paste", command=donothing)
-editmenu.add_command(label="Delete", command=donothing)
-editmenu.add_command(label="Select All", command=donothing)
-
-menubar.add_cascade(label="Edit", menu=editmenu)
-helpmenu = Menu(menubar, tearoff = 0)
-helpmenu.add_command(label="Help Index", command=donothing)
-helpmenu.add_command(label="About...", command=donothing)
-menubar.add_cascade(label="Help", menu=helpmenu)
-
-root.config(menu=menubar)
-root.mainloop()
-
-
-"""
-Init program here
-Setup simulation state variables, starting empty
-Sent sim state to calculation/simulation core
-Obtain results of calculation/simulation if view mode enabled
-Send results of calculation/simulation to draw module
-Check for any change to inputs if simulation is in static mode
-Frame timer collection
-"""
+root = rtn[0]
+menu = rtn[1]
+display = rtn[2]
+property = rtn[3]
 
 while True:
-    main.update_idletasks()
-    main.update()
+    sleep(0.001)
+    display.delete(ALL)
+
+    vtx_draw.drawPoints(display, points)
+    vtx_calc.iterateDynamicSim(conf, points)
+
+    root.update_idletasks()
+    root.update()

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """
 Program interface module
 
@@ -8,30 +11,96 @@ integration with the program runtime.
 Keep cyclic imports to minimum, ie write in a way where modules are not interlinked.
 """
 
-import Tkinter
+from Tkinter import *
 
 import vtx_com
 
-# TODO: Get window shell setup
+uiValues = {
+    "rPerm" : None,
+    "dTime" : None,
+    "count" : None
+}
+
+def setDefaults(root):
+    uiValues = {
+        "rPerm": StringVar(root),
+        "dTime": StringVar(root),
+        "count": StringVar(root)
+    }
+
+    uiValues["rPerm"].set("0.1")
+    uiValues["dTime"].set("1.0")
 
 def initWindow():
     """Call to init Tkinter window"""
-    handle = Tkinter.Tk()
-    return handle
+    root = Tk()
+    root.resizable(width=False, height=False)
 
-def initMenuBar(_handle):
+    setDefaults(root)
+
+    menu = _initMenuBar(root)
+    display = _initCanvas(root)
+    property = _initPropertiesPane(root)
+
+    return [root, menu, display, property]
+
+def _initMenuBar(_handle):
     """Add menu bar to passed window"""
-    item = None
-    return item
 
-def initCanvas(_handle):
+
+def _initCanvas(_handle):
     """Add canvas to passed window"""
-    item = None
-    return item
+    display = Canvas(_handle, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
+    display.grid(row=0, column=0, rowspan=2)
+    return display
 
-def initPropertiesPane(_handle):
+def _initPropertiesPane(_handle):
     """Add properties pane to window"""
-    item = None
-    return item
+    simConfig = LabelFrame(_handle, text="Simulation")
+    simConfig.grid(row=0, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
+    pointConfig = LabelFrame(_handle, text="Point")
+    pointConfig.grid(row=1, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
+
+    # SIMULATION PANE
+    rPermLabel = Label(simConfig, text="Relative ε")
+    rPermEntry = Spinbox(simConfig, from_=0.01, to=1, increment=0.01, textvariable=uiValues["rPerm"], width=4)
+    rPermLabel.grid(column=0, row=0, padx=10, pady=5, sticky="W")
+    rPermEntry.grid(column=1, row=0, pady=5, sticky="E")
+
+    dTimeLabel = Label(simConfig, text="Time Step")
+    dTimeEntry = Spinbox(simConfig, from_=0, to=10, increment=0.01, textvariable=uiValues["dTime"], width=4)
+    dTimeLabel.grid(column=0, row=1, padx=10, pady=5, sticky="W")
+    dTimeEntry.grid(column=1, row=1, pady=5, sticky="E")
+
+    nPointsLabel = Label(simConfig, text="# Points")
+    nPointsEntry = Entry(simConfig, textvariable=uiValues["count"], width=3)
+    nPointsLabel.grid(column=0, row=2, padx=10, pady=5, sticky="W")
+    nPointsEntry.grid(column=1, row=2, padx=5, pady=5, sticky="W")
+
+    clearButton = Button(simConfig, text="Clear")
+    clearButton.grid(column=0, columnspan=2, row=3, pady=5, padx=10, sticky="EW")
+
+    # POINT PANE
+    # Point Select(Spinbox of range(len(pointData))
+    # Mass (Spinbox)
+    # Charge (Spinbox)
+    # Position (Spinbox * 2)
+    # Velocity (Spinbox * 2)
+    # Acceleration (Spinbox * 2, Non-Editable)
+    # Force (Spinbox * 2, Non-Editable)
+
+    property = [simConfig, pointConfig]
+
+def updateConfig(conf={}, ):
+    conf["rPerm"] = float(uiValues["rPerm"])
+    conf["dTime"] = float(uiValues["dTime"])
+    uiValues["count"] = set(str(conf["count"]))
+    #conf["sim"] = self.simMode.get()
+    #conf["draw"] = self.viewMode.get()
+
+def updatePoints(pointData):
+    return None
+    # if dynamic, update displayed values with current values in point
+    # if static, update pointData with values from GUI
 
 # TODO: Get inputs/outputs linked to actual objects
