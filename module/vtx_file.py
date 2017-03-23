@@ -34,15 +34,17 @@ def saveJSONData(file, pointData, confData):
      "rPerm": confData["rPerm"].get()
     }
 
-    JSON_TREE = { "save": {
-        "point": point_list,
-        "config": confDataTree
-    }}
+    treeJSON = {
+        "save": {
+            "config": confDataTree,
+            "point": point_list
+        }
+    }
 
     with open(file, "w") as saveFile:
-        json.dump(JSON_TREE, saveFile)
+        json.dump(treeJSON, saveFile, indent=2)
     saveFile.close()
-    return JSON_TREE
+    return treeJSON
 
 
 def initPoints(jsonData):

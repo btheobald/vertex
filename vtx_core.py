@@ -16,7 +16,6 @@ from copy import deepcopy
 from module import vtx_calc
 from module import vtx_draw
 from module import vtx_gui
-from module import vtx_file
 from module import vtx_com
 
 """Simulation Config"""
