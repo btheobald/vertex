@@ -12,140 +12,179 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 """
 
 from Tkinter import *
+from copy import deepcopy
+import tkFileDialog
 
 from module import vtx_com
-
-uiVal = dict()
-modes = dict()
+from module import vtx_file
 
 VIEWMODES = [
-    ("Clear",         0),
+    ("Clear", 0),
     ("Force Vectors", 1),
     ("Field Vectors", 2),
-    ("Field Lines",   3)
+    ("Field Lines", 3)
 ]
-
 SIMMODES = [
-    ("Static",  0),
+    ("Static", 0),
     ("Dynamic", 1)
 ]
 
-def setUiDefaults():
-    uiVal["dTime"].set("1.0")
-    uiVal["rPerm"].set("0.1")
-    uiVal["nPoints"].set("0")
+class vertexUI(Frame):
+    def __init__(self, master=None):
+        # Mode variables
+        self.modes = {
+            "sim" : IntVar(master),
+            "view" : IntVar(master)
+        }
+        self.uiVal = {
+            "dTime" : StringVar(master),
+            "rPerm" : StringVar(master),
+            "nPoints" : StringVar(master)
+        }
 
-    modes["mSim"].set(0)
-    modes["mView"].set(0)
+        self.loaded = 0
+        self.uiPoints = []
 
-def initWindow():
-    """Call to init Tkinter window"""
-    root = Tk()
-    root.resizable(width=False, height=False)
+        # File setup
+        self.file_opt = options = {}
+        options['defaultextension'] = '.json'
+        options['filetypes'] = [('Vertex Savefile', '.json')]
+        options['initialdir'] = '.'
+        options['initialfile'] = 'save.json'
+        options['parent'] = master
+        options['title'] = 'Browse'
 
-    uiVal.update({"dTime" : StringVar(root)})
-    uiVal.update({"rPerm" : StringVar(root)})
-    uiVal.update({"nPoints" : StringVar(root)})
+        ## MENU BAR ##
+        Frame.__init__(self, master)
 
-    modes.update({"mSim" : IntVar(root)})
-    modes.update({"mView" : IntVar(root)})
+        self.__setUiDefaults()
+        self.__initMenuBar()
+        self.__initCanvas()
+        self.__initPropertiesPane()
 
-    setUiDefaults()
+    def __initMenuBar(self):
+        self.menubar = Menu(self)
 
-    menu = _initMenuBar(root)
-    display = _initCanvas(root)
-    property = _initPropertiesPane(root)
+        file = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="File", menu=file)
 
-    return [root, menu, display, property]
+        file.add_command(label="New", command=self.fNew)
+        file.add_command(label="Open", command=self.fOpen)
+        file.add_command(label="Save", command=self.fSave)
+        file.add_command(label="Save As", command=self.fSaveAs)
+        file.add_separator()
+        file.add_command(label="Exit")
 
-def _initMenuBar(_handle):
-    """Add menu bar to passed window"""
-    menubar = Menu(_handle)
-    filemenu = Menu(menubar, tearoff=0)
-    menubar.add_cascade(label="File", menu=filemenu)
-    filemenu.add_command(label="New")
-    filemenu.add_command(label="Open")
-    filemenu.add_command(label="Save")
-    filemenu.add_command(label="Save as")
-    filemenu.add_separator()
-    filemenu.add_command(label="Exit")
+        view = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="View", menu=view)
+        for label, val in VIEWMODES:
+            view.add_radiobutton(label=label, value=val, variable=self.modes["view"])
+        view.add_separator()
+        view.add_checkbutton(label="Origin")
+        view.add_checkbutton(label="Charges")
+        view.add_checkbutton(label="FPS Counter")
 
-    viewmenu = Menu(menubar, tearoff=0)
-    menubar.add_cascade(label="View", menu=viewmenu)
-    for label, val in VIEWMODES:
-        viewmenu.add_radiobutton(label=label, value=val, variable=modes["mView"])
-    viewmenu.add_separator()
-    viewmenu.add_command(label="Charges")
-    viewmenu.add_command(label="Origin")
+        mode = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Mode", menu=mode)
+        for label, val in SIMMODES:
+            mode.add_radiobutton(label=label, value=val, variable=self.modes["sim"])
 
-    modemenu = Menu(menubar, tearoff=0)
-    menubar.add_cascade(label="Mode", menu=modemenu)
-    for label, val in SIMMODES:
-        modemenu.add_radiobutton(label=label, value=val, variable=modes["mSim"])
-    modemenu.add_separator()
-    modemenu.add_command(label="Reset")
-    modemenu.add_command(label="Clear")
+        about = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="About", menu=about)
+        about.add_command(label="Help")
+        about.add_command(label="Debug Info")
+        about.add_command(label="About Vertex")
 
-    aboutmenu = Menu(menubar, tearoff=0)
-    menubar.add_cascade(label="About", menu=aboutmenu)
-    aboutmenu.add_command(label="Help")
-    aboutmenu.add_command(label="Version info")
-    aboutmenu.add_command(label="Credits")
+        self.master.config(menu=self.menubar)
 
-    _handle.config(menu=menubar)
-    return menubar
+    def __initCanvas(self):
+        """Add canvas to passed window"""
+        self.display = Canvas(self, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
+        self.display.grid(row=0, column=0, rowspan=2)
+        return self.display
 
-def _initCanvas(_handle):
-    """Add canvas to passed window"""
-    display = Canvas(_handle, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
-    display.grid(row=0, column=0, rowspan=2)
-    return display
+    def __setUiDefaults(self):
+        self.uiVal["dTime"].set("1.0")
+        self.uiVal["rPerm"].set("0.1")
+        self.uiVal["nPoints"].set("0")
+        self.modes["view"].set(0)
+        self.modes["sim"].set(0)
 
-def _initPropertiesPane(_handle):
-    """Add properties pane to window"""
-    simConfig = LabelFrame(_handle, text="Simulation")
-    simConfig.grid(row=0, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
-    pointConfig = LabelFrame(_handle, text="Point")
-    pointConfig.grid(row=1, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
+    def __initPropertiesPane(self):
+        """Add properties pane to window"""
+        self.simConfig = LabelFrame(self, text="Simulation")
+        self.simConfig.grid(row=0, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
+        self.pointConfig = LabelFrame(self, text="Point")
+        self.pointConfig.grid(row=1, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
 
-    # SIMULATION PANE
-    rPermLabel = Label(simConfig, text="Relative ε")
-    rPermEntry = Spinbox(simConfig, from_=0.01, to=1, increment=0.01, textvariable=uiVal["rPerm"], width=4)
-    rPermLabel.grid(column=0, row=0, padx=10, pady=5, sticky="W")
-    rPermEntry.grid(column=1, row=0, pady=5, sticky="E")
+        # SIMULATION PANE
+        self.rPermLabel = Label(self.simConfig, text="Relative ε")
+        self.rPermEntry = Spinbox(self.simConfig, from_=0.01, to=1, increment=0.01, textvariable=self.uiVal["rPerm"], width=4)
+        self.rPermLabel.grid(column=0, row=0, padx=10, pady=5, sticky="W")
+        self.rPermEntry.grid(column=1, row=0, pady=5, sticky="E")
 
-    dTimeLabel = Label(simConfig, text="Time Step")
-    dTimeEntry = Spinbox(simConfig, from_=0, to=10, increment=0.01, textvariable=uiVal["dTime"], width=4)
-    dTimeLabel.grid(column=0, row=1, padx=10, pady=5, sticky="W")
-    dTimeEntry.grid(column=1, row=1, pady=5, sticky="E")
+        self.dTimeLabel = Label(self.simConfig, text="Time Step")
+        self.dTimeEntry = Spinbox(self.simConfig, from_=0, to=10, increment=0.01, textvariable=self.uiVal["dTime"], width=4)
+        self.dTimeLabel.grid(column=0, row=1, padx=10, pady=5, sticky="W")
+        self.dTimeEntry.grid(column=1, row=1, pady=5, sticky="E")
 
-    nPointsLabel = Label(simConfig, text="# Points")
-    nPointsEntry = Entry(simConfig, textvariable=uiVal["nPoints"], width=3)
-    nPointsLabel.grid(column=0, row=2, padx=10, pady=5, sticky="W")
-    nPointsEntry.grid(column=1, row=2, padx=5, pady=5, sticky="W")
+        self.nPointsLabel = Label(self.simConfig, text="# Points")
+        self.nPointsEntry = Entry(self.simConfig, textvariable=self.uiVal["nPoints"], width=3)
+        self.nPointsLabel.grid(column=0, row=2, padx=10, pady=5, sticky="W")
+        self.nPointsEntry.grid(column=1, row=2, padx=5, pady=5, sticky="W")
 
-    # POINT PANE
-    # Point Select(Spinbox of range(len(pointData))
-    # Mass (Spinbox)
-    # Charge (Spinbox)
-    # Position (Spinbox * 2)
-    # Velocity (Spinbox * 2)
-    # Acceleration (Spinbox * 2, Non-Editable)
-    # Force (Spinbox * 2, Non-Editable)
+        # POINT PANE
+        # Point Select(Spinbox of range(len(pointData))
+        # Mass (Spinbox)
+        # Charge (Spinbox)
+        # Position (Spinbox * 2)
+        # Velocity (Spinbox * 2)
+        # Acceleration (Spinbox * 2, Non-Editable)
+        # Force (Spinbox * 2, Non-Editable)
 
-    property = [simConfig, pointConfig]
-    return property
+    def updateConfig(self, conf={}):
+        conf["rPerm"] = float(self.uiVal["rPerm"].get())
+        conf["dTime"] = float(self.uiVal["dTime"].get())
+        self.uiVal["nPoints"].set(str(conf["nPoints"]))
+        conf["sim"] = self.modes["sim"].get()
+        conf["view"] = self.modes["view"].get()
 
-def updateConfig(conf={}):
-    conf["rPerm"] = float(uiVal["rPerm"].get())
-    conf["dTime"] = float(uiVal["dTime"].get())
-    uiVal["nPoints"].set(str(conf["nPoints"]))
-    conf["mSim"] = modes["mSim"].get()
-    conf["mView"] = modes["mView"].get()
+    def updatePoints(self, points=[]):
+        if self.loaded == 1:
+            self.loaded = 0
+            for n in range(len(points)):
+                points.pop() # Remove existing
+            for n in range(len(self.uiPoints)):
+                points.append(self.uiPoints[n]) # Add New
+        else:
+            self.uiPoints = deepcopy(points)
 
-def updatePoints(pointData):
-    return None
-    # if dynamic, update displayed values with current values in point
-    # if static, update pointData with values from GUI
+    # Command functions
+    def fNew(self):
+        self.uiPoints = []
+        self.loaded = 1
+        self.filename = ''
+        self.modes["sim"].set(0)
 
-# TODO: Get inputs/outputs linked to actual objects
+    def fOpen(self):
+        self.filename = tkFileDialog.askopenfilename(**self.file_opt)
+        if self.filename != '':
+            data = vtx_file.loadJSONData(self.filename)
+            self.uiPoints = deepcopy(vtx_file.initPoints(data))
+
+            self.uiVal["rPerm"].set(data["save"]["config"]["rPerm"])
+            self.uiVal["dTime"].set(data["save"]["config"]["dTime"])
+            self.modes["sim"].set(0)
+
+            self.loaded = 1
+
+    def fSaveAs(self):
+        self.filename = tkFileDialog.asksaveasfilename(**self.file_opt)
+        if self.filename != '':
+            vtx_file.saveJSONData(self.filename, self.uiPoints, self.uiVal)
+
+    def fSave(self):
+        if self.filename == '':
+            self.filename = tkFileDialog.asksaveasfilename(**self.file_opt)
+        if self.filename != '':
+            vtx_file.saveJSONData(self.filename, self.uiPoints, self.uiVal)

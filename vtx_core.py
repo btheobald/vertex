@@ -23,15 +23,12 @@ conf = {
     "rPerm":0.10,
     "dTime":2.00,
     "nPoints":0,
-    "mSim":0,
-    "mView":0
+    "sim":0,
+    "view":0
 }
 
 """Init of point set"""
-points = [
-    vtx_com.PointCharge(_m=10, _c=0.1, _p=[100, 200]),
-    vtx_com.PointCharge(_m= 1, _c=0.1, _p=[300, 150], _v=[-0.1, 0.03])
-]
+points = []
 
 pointsBackup = list(points)
 backupMade = False
@@ -40,20 +37,19 @@ backupMade = False
 calcData = None
 
 """Get root window handle"""
-rtn = vtx_gui.initWindow()
+root = Tk()
+root.resizable(width=False, height=False)
 
-root = rtn[0]
-menu = rtn[1]
-display = rtn[2]
-property = rtn[3]
+gui = vtx_gui.vertexUI(root)
+gui.pack()
 
 while True:
     # Small delay for persistence
     sleep(0.001)
-    display.delete(ALL)
+    gui.display.delete(ALL)
 
     # Simulation
-    if conf["mSim"] == 1:
+    if conf["sim"] == 1:
         if backupMade == False:
             pointsBackup = deepcopy(points)
             backupMade = True
@@ -66,20 +62,21 @@ while True:
             backupMade = False
 
     # Render / Calculations
-    if conf["mView"] == 1: # Force Arrows
+    if conf["view"] == 1: # Force Arrows
         vtx_calc.calculateForces(conf, points)
         #vtx_draw.drawForceArrows(display, points)
-    elif conf["mView"] == 2: # Field Vectors
+    elif conf["view"] == 2: # Field Vectors
         calcData=vtx_calc.calculateFieldVectors(conf, points)
         #vtx_draw.drawFieldVectors(display, calcData)
-    elif conf["mView"] == 3: # Field Lines
+    elif conf["view"] == 3: # Field Lines
         None
 
-    vtx_draw.drawPoints(display, points)
+    vtx_draw.drawPoints(gui.display, points)
 
-    # UI Updates
+    # UI Interaction Updates
     conf["nPoints"] = len(points)
-    vtx_gui.updateConfig(conf)
+    gui.updatePoints(points)
+    gui.updateConfig(conf)
 
     root.update_idletasks()
     root.update()

@@ -1,8 +1,8 @@
 {
 "save": {
 	"config": {
-		"rel_per": 1.000,
-		"d_time": 0.010
+		"rPerm": 1.000,
+		"dTime": 0.010
 	},
 	"point": [
 		{
