@@ -44,6 +44,15 @@ class vertexUI(Frame):
 
         self.loaded = 0
         self.uiPoints = []
+        self.pointVal = {
+            "pSelect" : StringVar(master),
+            "pMass" : StringVar(master),
+            "pCharge" : 0,
+            "pPos" : [StringVar(master), StringVar(master)],
+            "pVel" : [StringVar(master), StringVar(master)],
+            "pAcc" : [StringVar(master), StringVar(master)],
+            "pForce" : [StringVar(master), StringVar(master)],
+        }
 
         # File setup
         self.file_opt = options = {}
@@ -113,34 +122,82 @@ class vertexUI(Frame):
     def __initPropertiesPane(self):
         """Add properties pane to window"""
         self.simConfig = LabelFrame(self, text="Simulation")
-        self.simConfig.grid(row=0, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
+        self.simConfig.grid(row=0, column=1, padx=10, ipadx=5, ipady=5, sticky="NEW")
         self.pointConfig = LabelFrame(self, text="Point")
-        self.pointConfig.grid(row=1, column=1, padx=10, pady=5, ipadx=10, ipady=10, sticky="NEW")
+        self.pointConfig.grid(row=1, column=1, padx=10, ipadx=5, ipady=5, sticky="NEW")
 
         # SIMULATION PANE
         self.rPermLabel = Label(self.simConfig, text="Relative ε")
         self.rPermEntry = Spinbox(self.simConfig, from_=0.01, to=1, increment=0.01, textvariable=self.uiVal["rPerm"], width=4)
-        self.rPermLabel.grid(column=0, row=0, padx=10, pady=5, sticky="W")
-        self.rPermEntry.grid(column=1, row=0, pady=5, sticky="E")
+        self.rPermLabel.grid(column=0, row=0, padx=10, pady=4, sticky="W")
+        self.rPermEntry.grid(column=1, columnspan=2, row=0, padx=5, pady=5, sticky="E")
 
         self.dTimeLabel = Label(self.simConfig, text="Time Step")
         self.dTimeEntry = Spinbox(self.simConfig, from_=0, to=10, increment=0.01, textvariable=self.uiVal["dTime"], width=4)
-        self.dTimeLabel.grid(column=0, row=1, padx=10, pady=5, sticky="W")
-        self.dTimeEntry.grid(column=1, row=1, pady=5, sticky="E")
+        self.dTimeLabel.grid(column=0, row=1, padx=10, pady=4, sticky="W")
+        self.dTimeEntry.grid(column=1, columnspan=2, row=1, padx=5, pady=5, sticky="E")
 
         self.nPointsLabel = Label(self.simConfig, text="# Points")
         self.nPointsEntry = Entry(self.simConfig, textvariable=self.uiVal["nPoints"], width=3)
-        self.nPointsLabel.grid(column=0, row=2, padx=10, pady=5, sticky="W")
-        self.nPointsEntry.grid(column=1, row=2, padx=5, pady=5, sticky="W")
+        self.nPointsLabel.grid(column=0, row=2, padx=10, pady=4, sticky="W")
+        self.nPointsEntry.grid(column=1, columnspan=2, row=2, padx=5, pady=5, sticky="E")
 
         # POINT PANE
-        # Point Select(Spinbox of range(len(pointData))
-        # Mass (Spinbox)
-        # Charge (Spinbox)
-        # Position (Spinbox * 2)
-        # Velocity (Spinbox * 2)
-        # Acceleration (Spinbox * 2, Non-Editable)
-        # Force (Spinbox * 2, Non-Editable)
+        self.pSelectLabel = Label(self.pointConfig, text="Selected")
+        self.pSelectEntry = Spinbox(self.pointConfig, from_=1, to=10, increment=1, textvariable=self.pointVal["pSelect"], width=4)
+        self.pSelectLabel.grid(column=0, columnspan=2, row=0, padx=10, pady=4)
+        self.pSelectEntry.grid(column=2, columnspan=2, row=0, padx=5, pady=4, sticky="E")
+
+        self.pMassLabel = Label(self.pointConfig, text="Mass")
+        self.pMassEntry = Spinbox(self.pointConfig, from_=0.1, to=100, increment=0.1, textvariable=self.pointVal["pMass"], width=4)
+        self.pMassLabel.grid(column=0, columnspan=2, row=1, padx=10, pady=4)
+        self.pMassEntry.grid(column=2, columnspan=2, row=1, padx=5, pady=4, sticky="E")
+
+        self.pChargeLabel = Label(self.pointConfig, text="Charge")
+        self.pChargeEntry = Spinbox(self.pointConfig, from_=-1, to=1, increment=0.1, textvariable=self.pointVal["pCharge"], width=4)
+        self.pChargeLabel.grid(column=0, columnspan=2, row=2, padx=10, pady=4)
+        self.pChargeEntry.grid(column=2, columnspan=2, row=2, padx=5, pady=4, sticky="E")
+
+        self.pPosXLabel = Label(self.pointConfig, text="pX")
+        self.pPosXEntry = Spinbox(self.pointConfig, from_=0, to=400, increment=0.1, textvariable=self.pointVal["pPos"][0], width=5)
+        self.pPosXLabel.grid(column=0, row=3, padx=5, pady=4, sticky="W")
+        self.pPosXEntry.grid(column=1, row=3, pady=4, sticky="E")
+        self.pPosYLabel = Label(self.pointConfig, text="pY")
+        self.pPosYEntry = Spinbox(self.pointConfig, from_=0, to=400, increment=0.1, textvariable=self.pointVal["pPos"][1], width=5)
+        self.pPosYLabel.grid(column=2, row=3, padx=5, pady=5, sticky="W")
+        self.pPosYEntry.grid(column=3, row=3, pady=5, sticky="E")
+
+        self.pVelXLabel = Label(self.pointConfig, text="vX")
+        self.pVelXEntry = Spinbox(self.pointConfig, from_=-100, to=100, increment=0.1, textvariable=self.pointVal["pVel"][0], width=5)
+        self.pVelXLabel.grid(column=0, row=4, padx=5, pady=4, sticky="W")
+        self.pVelXEntry.grid(column=1, row=4, pady=4, sticky="E")
+        self.pVelYLabel = Label(self.pointConfig, text="vY")
+        self.pVelYEntry = Spinbox(self.pointConfig, from_=-100, to=100, increment=0.1, textvariable=self.pointVal["pVel"][1], width=5)
+        self.pVelYLabel.grid(column=2, row=4, padx=5, pady=4, sticky="W")
+        self.pVelYEntry.grid(column=3, row=4, pady=4, sticky="E")
+
+        self.pAccXLabel = Label(self.pointConfig, text="aX")
+        self.pAccXEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][0], width=7)
+        self.pAccXLabel.grid(column=0, row=5, padx=5, pady=4, sticky="W")
+        self.pAccXEntry.grid(column=1, row=5, pady=4, sticky="E")
+        self.pAccYLabel = Label(self.pointConfig, text="aY")
+        self.pAccYEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][1], width=7)
+        self.pAccYLabel.grid(column=2, row=5, padx=5, pady=4, sticky="W")
+        self.pAccYEntry.grid(column=3, row=5, pady=4, sticky="E")
+
+        self.pForXLabel = Label(self.pointConfig, text="fX")
+        self.pForXEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][0], width=7)
+        self.pForXLabel.grid(column=0, row=6, padx=5, pady=4, sticky="W")
+        self.pForXEntry.grid(column=1, row=6, pady=4, sticky="E")
+        self.pForYLabel = Label(self.pointConfig, text="fY")
+        self.pForYEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][1], width=7)
+        self.pForYLabel.grid(column=2, row=6, padx=5, pady=4, sticky="W")
+        self.pForYEntry.grid(column=3, row=6, pady=4, sticky="E")
+
+        self.NewButton = Button(self.pointConfig, text="New")
+        self.NewButton.grid(column=0, columnspan=2, row=7, padx=5, pady=4, sticky="EW")
+        self.DelButton = Button(self.pointConfig, text="Delete")
+        self.DelButton.grid(column=2, columnspan=2, row=7, padx=5, pady=4, sticky="EW")
 
     def updateConfig(self, conf={}):
         conf["rPerm"] = float(self.uiVal["rPerm"].get())
