@@ -143,17 +143,17 @@ class vertexUI(Frame):
         self.nPointsEntry.grid(column=1, columnspan=2, row=2, padx=5, pady=5, sticky="E")
 
         # POINT PANE
-        self.pSelectLabel = Label(self.pointConfig, text="Selected")
+        self.pSelectLabel = Label(self.pointConfig, text="Selected Point")
         self.pSelectEntry = Spinbox(self.pointConfig, from_=1, to=10, increment=1, textvariable=self.pointVal["pSelect"], width=4)
         self.pSelectLabel.grid(column=0, columnspan=2, row=0, padx=10, pady=4)
         self.pSelectEntry.grid(column=2, columnspan=2, row=0, padx=5, pady=4, sticky="E")
 
-        self.pMassLabel = Label(self.pointConfig, text="Mass")
+        self.pMassLabel = Label(self.pointConfig, text="Mass (m)")
         self.pMassEntry = Spinbox(self.pointConfig, from_=0.1, to=100, increment=0.1, textvariable=self.pointVal["pMass"], width=4)
         self.pMassLabel.grid(column=0, columnspan=2, row=1, padx=10, pady=4)
         self.pMassEntry.grid(column=2, columnspan=2, row=1, padx=5, pady=4, sticky="E")
 
-        self.pChargeLabel = Label(self.pointConfig, text="Charge")
+        self.pChargeLabel = Label(self.pointConfig, text="Charge (Q)")
         self.pChargeEntry = Spinbox(self.pointConfig, from_=-1, to=1, increment=0.1, textvariable=self.pointVal["pCharge"], width=4)
         self.pChargeLabel.grid(column=0, columnspan=2, row=2, padx=10, pady=4)
         self.pChargeEntry.grid(column=2, columnspan=2, row=2, padx=5, pady=4, sticky="E")

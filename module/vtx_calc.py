@@ -25,9 +25,9 @@ def calculateForces(simConf, pointData=[vtx_com.PointCharge()]):
 
     for a in range(len(pointData)):
         for b in range(a+1, len(pointData)):
-            # Calculate individual force on point pair ab
+            # Calculate individual force on point pair ab, add softening factor
             dVec = calculateVecDist(pointData, a, b)
-            dMag = sqrt(dVec[0]**2 + dVec[1]**2)
+            dMag = sqrt(dVec[0]**2 + dVec[1]**2)+0.1
 
             # Vector force calculation
             forcePreVec = (1/simConf["rPerm"])*((pointData[a].pCharge*pointData[b].pCharge)/dMag**3)
