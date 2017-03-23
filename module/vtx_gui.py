@@ -68,10 +68,10 @@ class vertexUI(Frame):
         file = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="File", menu=file)
 
-        file.add_command(label="New", command=self.fNew)
-        file.add_command(label="Open", command=self.fOpen)
-        file.add_command(label="Save", command=self.fSave)
-        file.add_command(label="Save As", command=self.fSaveAs)
+        file.add_command(label="New", command=self.__fNew)
+        file.add_command(label="Open", command=self.__fOpen)
+        file.add_command(label="Save", command=self.__fSave)
+        file.add_command(label="Save As", command=self.__fSaveAs)
         file.add_separator()
         file.add_command(label="Exit")
 
@@ -160,13 +160,13 @@ class vertexUI(Frame):
             self.uiPoints = deepcopy(points)
 
     # Command functions
-    def fNew(self):
+    def __fNew(self):
         self.uiPoints = []
         self.loaded = 1
         self.filename = ''
         self.modes["sim"].set(0)
 
-    def fOpen(self):
+    def __fOpen(self):
         self.filename = tkFileDialog.askopenfilename(**self.file_opt)
         if self.filename != '':
             data = vtx_file.loadJSONData(self.filename)
@@ -178,12 +178,12 @@ class vertexUI(Frame):
 
             self.loaded = 1
 
-    def fSaveAs(self):
+    def __fSaveAs(self):
         self.filename = tkFileDialog.asksaveasfilename(**self.file_opt)
         if self.filename != '':
             vtx_file.saveJSONData(self.filename, self.uiPoints, self.uiVal)
 
-    def fSave(self):
+    def __fSave(self):
         if self.filename == '':
             self.filename = tkFileDialog.asksaveasfilename(**self.file_opt)
         if self.filename != '':
