@@ -25,7 +25,8 @@ def glfwWindowInit():
     if not glfw.init():
         return
     # Create a windowed mode window and its OpenGL context
-    window = glfw.create_window(400, 400, "Vertex", None, None)
+    glfw.window_hint(glfw.SAMPLES, 8);
+    window = glfw.create_window(600, 600, "Vertex", None, None)
     if not window:
         glfw.terminate()
         return
@@ -38,7 +39,7 @@ def glfwWindowInit():
 def initDisplay(lXRes, lYRes):
   glMatrixMode(GL_PROJECTION)
   glLoadIdentity();
-  glOrtho(-lXRes, lXRes, -lYRes, lYRes, 1.0, -1.0)
+  glOrtho(0, lXRes, 0, lYRes, 1.0, -1.0)
 
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity()
@@ -56,7 +57,10 @@ conf = {
 }
 
 """Init of point set"""
-points = []
+points = [
+    vtx_com.PointCharge(_m=10.0, _c=1.0, _p=[200.0,200.0]),
+    vtx_com.PointCharge(_m=1.0, _c=-1.0, _p=[100.0,200.0], _v=[0.0, 0.314])
+]
 """Backup Store"""
 pointsBackup = list(points)
 backupMade = False
@@ -74,13 +78,14 @@ gui.pack()
 
 window = glfwWindowInit()
 glfw.make_context_current(window)
-initDisplay(400, 400)
+initDisplay(600, 600)
 
 """Main program loop"""
 while not glfw.window_should_close(window):
     """Small delay for persistence"""
-    sleep(0.0001)
+    #sleep(0.0001)
     #gui.display.delete(ALL)
+    glClear(GL_COLOR_BUFFER_BIT);
 
     """Simulation Mode"""
     if conf["sim"] == 1:
@@ -105,6 +110,7 @@ while not glfw.window_should_close(window):
     elif conf["view"] == 3: # Field Lines
         pass #TODO: Implement field lines.
     #vtx_draw.drawPoints(gui.display, points)
+    vtx_draw.drawPoints(points)
 
     """UI Interaction Updates"""
     conf["nPoints"] = len(points)

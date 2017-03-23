@@ -39,7 +39,7 @@ class PointCharge:
         # Attributes
         self.pMass = _m  # Point Mass
         self.pCharge = _c  # Point Charge
-        self.pRadius = 3.00  # Point Radius, should remain constant
+        self.pRadius = 4.00  # Point Radius, should remain constant
         self.pPos = vecXY(_p)  # Position vector
         self.pVel = vecXY(_v)  # Velocity vector
         self.pAcc = vecXY()  # Acceleration vector

@@ -68,7 +68,7 @@ class vertexUI(Frame):
 
         self.__setUiDefaults()
         self.__initMenuBar()
-        self.__initCanvas()
+        #self.__initCanvas()
         self.__initPropertiesPane()
 
     def __initMenuBar(self):
@@ -124,7 +124,7 @@ class vertexUI(Frame):
         self.simConfig = LabelFrame(self, text="Simulation")
         self.simConfig.grid(row=0, column=1, padx=10, ipadx=5, ipady=5, sticky="NEW")
         self.pointConfig = LabelFrame(self, text="Point")
-        self.pointConfig.grid(row=1, column=1, padx=10, ipadx=5, ipady=5, sticky="NEW")
+        self.pointConfig.grid(row=1, column=1, padx=10, pady=10, ipadx=5, ipady=5, sticky="NEW")
 
         # SIMULATION PANE
         self.rPermLabel = Label(self.simConfig, text="Relative ε")
