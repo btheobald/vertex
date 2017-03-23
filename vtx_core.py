@@ -11,12 +11,40 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 from Tkinter import *
 from time import sleep
 from copy import deepcopy
+import glfw
+from OpenGL.GL import *
 
 # INTERNAL MODULES
 from module import vtx_calc
 from module import vtx_draw
 from module import vtx_gui
 from module import vtx_com
+
+def glfwWindowInit():
+    # Initialize the library
+    if not glfw.init():
+        return
+    # Create a windowed mode window and its OpenGL context
+    window = glfw.create_window(400, 400, "Vertex", None, None)
+    if not window:
+        glfw.terminate()
+        return
+
+    # Make the window's context current
+    glfw.make_context_current(window)
+
+    return window
+
+def initDisplay(lXRes, lYRes):
+  glMatrixMode(GL_PROJECTION)
+  glLoadIdentity();
+  glOrtho(-lXRes, lXRes, -lYRes, lYRes, 1.0, -1.0)
+
+  glMatrixMode(GL_MODELVIEW)
+  glLoadIdentity()
+
+  glViewport(0, 0, lXRes, lYRes)
+  glClearColor(0.0, 0.0, 0.0, 1)
 
 """Simulation Config"""
 conf = {
@@ -38,16 +66,21 @@ calcData = None
 
 """Get root window handle"""
 root = Tk()
+root.wm_title("Vertex")
 root.resizable(width=False, height=False)
 """Create GUI object and pack"""
 gui = vtx_gui.vertexUI(root)
 gui.pack()
 
+window = glfwWindowInit()
+glfw.make_context_current(window)
+initDisplay(400, 400)
+
 """Main program loop"""
-while True:
+while not glfw.window_should_close(window):
     """Small delay for persistence"""
     sleep(0.0001)
-    gui.display.delete(ALL)
+    #gui.display.delete(ALL)
 
     """Simulation Mode"""
     if conf["sim"] == 1:
@@ -71,7 +104,7 @@ while True:
         #TODO: Draw field vectors.
     elif conf["view"] == 3: # Field Lines
         pass #TODO: Implement field lines.
-    vtx_draw.drawPoints(gui.display, points)
+    #vtx_draw.drawPoints(gui.display, points)
 
     """UI Interaction Updates"""
     conf["nPoints"] = len(points)
@@ -79,5 +112,9 @@ while True:
     gui.updateConfig(conf)
 
     """Render and Update"""
+    glfw.swap_buffers(window)
+    glfw.poll_events()
     root.update_idletasks()
     root.update()
+
+glfw.terminate()
