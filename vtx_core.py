@@ -19,9 +19,10 @@ from module import vtx_gui
 from module import vtx_file
 from module import vtx_com
 
+"""Simulation Config"""
 conf = {
     "rPerm":0.10,
-    "dTime":2.00,
+    "dTime":1.00,
     "nPoints":0,
     "sim":0,
     "view":0
@@ -29,26 +30,27 @@ conf = {
 
 """Init of point set"""
 points = []
-
+"""Backup Store"""
 pointsBackup = list(points)
 backupMade = False
 
-# Data store for field lines / field vectors
+"""Data store for field vector / line calculation results"""
 calcData = None
 
 """Get root window handle"""
 root = Tk()
 root.resizable(width=False, height=False)
-
+"""Create GUI object and pack"""
 gui = vtx_gui.vertexUI(root)
 gui.pack()
 
+"""Main program loop"""
 while True:
-    # Small delay for persistence
-    sleep(0.001)
+    """Small delay for persistence"""
+    sleep(0.0001)
     gui.display.delete(ALL)
 
-    # Simulation
+    """Simulation Mode"""
     if conf["sim"] == 1:
         if backupMade == False:
             pointsBackup = deepcopy(points)
@@ -61,22 +63,22 @@ while True:
             print "backup loaded"
             backupMade = False
 
-    # Render / Calculations
+    """Calculations and Draw"""
     if conf["view"] == 1: # Force Arrows
         vtx_calc.calculateForces(conf, points)
-        #vtx_draw.drawForceArrows(display, points)
+        #TODO: Draw force arrows on points.
     elif conf["view"] == 2: # Field Vectors
         calcData=vtx_calc.calculateFieldVectors(conf, points)
-        #vtx_draw.drawFieldVectors(display, calcData)
+        #TODO: Draw field vectors.
     elif conf["view"] == 3: # Field Lines
-        None
-
+        pass #TODO: Implement field lines.
     vtx_draw.drawPoints(gui.display, points)
 
-    # UI Interaction Updates
+    """UI Interaction Updates"""
     conf["nPoints"] = len(points)
     gui.updatePoints(points)
     gui.updateConfig(conf)
 
+    """Render and Update"""
     root.update_idletasks()
     root.update()
