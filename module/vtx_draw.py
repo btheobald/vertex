@@ -98,3 +98,8 @@ def drawFieldGradient(canvasObj, calcRes):
         for y in range(len(calcRes[x])):
             fillS = getStrengthColour(calcRes[x][y][2], 0.01)
             canvasObj.create_rectangle(calcRes[x][y][0]-2, calcRes[x][y][1]-2, calcRes[x][y][0]+2, calcRes[x][y][1]+2, fill=fillS, width=0)
+            
+def drawFieldLines(canvasObj, calcRes):
+  for i in range(len(calcRes)):
+    for l in range(len(calcRes[i])-1):
+      canvasObj.create_line(calcRes[i][l].get(0), calcRes[i][l].get(1), calcRes[i][l+1].get(0), calcRes[i][l+1].get(1), fill="yellow")

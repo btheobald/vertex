@@ -88,7 +88,7 @@ def _calculateFieldVector(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
     vector[0] = x+10*cos(vAngle)
     vector[1] = y+10*sin(vAngle)
 
-    return [x, y, vector[0], vector[1], net]
+    return [x, y, vector[0], vector[1], net, vAngle]
 
 def _calculateFieldGradientPoint(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
     vector = [0.0, 0.0]
@@ -132,5 +132,29 @@ def calculateFieldGradient(simConf, pointData=[vtx_com.PointCharge()]):
             resultData[x/4].append(_calculateFieldGradientPoint(simConf, pointData, x, y))
     return resultData
 
-def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()]):
-    return None
+def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()], step=2.0, nLines=20, mSeg=1000):
+    resultData = []
+    offset = 0
+    for n in range(len(pointData)):
+      # Cycle positive points
+      if(pointData[n].pCharge > 0):
+        for i in range(nLines):
+          resultData.append([])
+          # Start on radius
+          a = radians(i*(360/nLines))
+          xR = pointData[n].pPos.get(0)+(pointData[n].pRadius*cos(a))
+          yR = pointData[n].pPos.get(1)+(pointData[n].pRadius*sin(a))
+          for l in range(mSeg):
+            # Continue line
+            resultData[i+offset].append(vtx_com.vecXY([xR,yR]))
+            res = _calculateFieldVector(simConf, pointData, xR, yR)
+            xR = xR+(step*cos(res[5]))
+            yR = yR+(step*sin(res[5]))
+            if res[4] < -5:
+              break
+            if (res[0] < -800) or (res[0] > 1200):
+              break
+            if (res[1] < -800) or (res[1] > 1200):
+              break
+        offset+=20
+    return resultData

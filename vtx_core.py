@@ -70,7 +70,8 @@ while True:
         calcData=vtx_calc.calculateFieldVectorMap(conf, points)
         vtx_draw.drawFieldVectors(gui.display, calcData)
     elif conf["view"] == 3: # Field Lines
-        pass #TODO: Implement field lines.
+        calcData=vtx_calc.calculateFieldLines(conf, points)
+        vtx_draw.drawFieldLines(gui.display, calcData)
     elif conf["view"] == 4: # Field Gradient
         calcData=vtx_calc.calculateFieldGradient(conf, points)
         vtx_draw.drawFieldGradient(gui.display, calcData)
