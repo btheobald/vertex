@@ -59,7 +59,10 @@ def iterateDynamicSim(simConf, pointData=[vtx_com.PointCharge()]):
 def _calculateFieldVector(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
     vector = [0.0, 0.0]
 
+    net = 0
+    Esum = 0
     vAngle = 0
+
     for n in range(len(pointData)):
         xDist = x - pointData[n].pPos.get(0)
         yDist = y - pointData[n].pPos.get(1)
@@ -71,19 +74,52 @@ def _calculateFieldVector(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
         else:
             E = 0
 
+        Esum += E
+
         vector[0] += E * xDist
         vector[1] += E * yDist
 
-        net = sqrt(vector[0] ** 2 + vector[1] ** 2) * 1E3
+    net = sqrt(vector[0] ** 2 + vector[1] ** 2)
+    if Esum < 0:
+        net = -net
 
-        vAngle = atan2(vector[1],vector[0])
+    vAngle = atan2(vector[1], vector[0])
 
     vector[0] = x+10*cos(vAngle)
     vector[1] = y+10*sin(vAngle)
 
     return [x, y, vector[0], vector[1], net]
 
-def calculateFieldVectors(simConf, pointData=[vtx_com.PointCharge()]):
+def _calculateFieldGradientPoint(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
+    vector = [0.0, 0.0]
+
+    net = 0
+    Esum = 0
+    vAngle = 0
+
+    for n in range(len(pointData)):
+        xDist = x - pointData[n].pPos.get(0)
+        yDist = y - pointData[n].pPos.get(1)
+        vDist = sqrt(pow(xDist, 2) + pow(yDist, 2))
+
+        # Protect divide by zero
+        if not vDist == 0:
+            E = 1/simConf["rPerm"]*(pointData[n].pCharge / vDist**3)
+        else:
+            E = 0
+
+        Esum += E
+
+        vector[0] += E * xDist
+        vector[1] += E * yDist
+
+    net = sqrt(vector[0] ** 2 + vector[1] ** 2)
+    if Esum < 0:
+        net = -net
+
+    return [x, y, net]
+
+def calculateFieldVectorMap(simConf, pointData=[vtx_com.PointCharge()]):
     resultData = []
     for x in range(401):
         if (x % 20) == 0:
@@ -91,6 +127,16 @@ def calculateFieldVectors(simConf, pointData=[vtx_com.PointCharge()]):
             for y in range(401):
                 if (y % 20) == 0:
                     resultData[x/20].append(_calculateFieldVector(simConf, pointData, x, y))
+    return resultData
+
+def calculateFieldGradient(simConf, pointData=[vtx_com.PointCharge()]):
+    resultData = []
+    for x in range(401):
+        if (x % 10) == 0:
+            resultData.append([])
+            for y in range(401):
+                if (y % 10) == 0:
+                    resultData[x/10].append(_calculateFieldGradientPoint(simConf, pointData, x, y))
     return resultData
 
 def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()]):

@@ -65,12 +65,15 @@ while True:
     """Calculations and Draw"""
     if conf["view"] == 1: # Force Arrows
         vtx_calc.calculateForces(conf, points)
-        #TODO: Draw force arrows on points.
+        vtx_draw.drawForceArrows(gui.display, points)
     elif conf["view"] == 2: # Field Vectors
-        calcData=vtx_calc.calculateFieldVectors(conf, points)
-        #TODO: Draw field vectors.
+        calcData=vtx_calc.calculateFieldVectorMap(conf, points)
+        vtx_draw.drawFieldVectors(gui.display, calcData)
     elif conf["view"] == 3: # Field Lines
         pass #TODO: Implement field lines.
+    elif conf["view"] == 4: # Field Gradient
+        calcData=vtx_calc.calculateFieldGradient(conf, points)
+        vtx_draw.drawFieldGradient(gui.display, calcData)
     vtx_draw.drawPoints(gui.display, points)
 
     """UI Interaction Updates"""

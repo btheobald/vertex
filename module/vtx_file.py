@@ -30,8 +30,8 @@ def saveJSONData(file, pointData, confData):
         point_list.append(pointData[i].getJSON())
 
     confDataTree = {
-     "dTime": confData["dTime"],
-     "rPerm": confData["rPerm"]
+     "dTime": float(confData["dTime"].get()),
+     "rPerm": float(confData["rPerm"].get())
     }
 
     treeJSON = {

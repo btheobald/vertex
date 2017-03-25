@@ -22,7 +22,8 @@ VIEWMODES = [
     ("Clear", 0),
     ("Force Vectors", 1),
     ("Field Vectors", 2),
-    ("Field Lines", 3)
+    ("Field Lines", 3),
+    ("Field Gradient", 4)
 ]
 SIMMODES = [
     ("Static", 0),
