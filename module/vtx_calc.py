@@ -110,14 +110,7 @@ def _calculateFieldGradientPoint(simConf, pointData=[vtx_com.PointCharge()], x=0
 
         Esum += E
 
-        vector[0] += E * xDist
-        vector[1] += E * yDist
-
-    net = sqrt(vector[0] ** 2 + vector[1] ** 2)
-    if Esum < 0:
-        net = -net
-
-    return [x, y, net]
+    return [x, y, Esum*10]
 
 def calculateFieldVectorMap(simConf, pointData=[vtx_com.PointCharge()]):
     resultData = []
@@ -132,11 +125,11 @@ def calculateFieldVectorMap(simConf, pointData=[vtx_com.PointCharge()]):
 def calculateFieldGradient(simConf, pointData=[vtx_com.PointCharge()]):
     resultData = []
     for x in range(401):
-        if (x % 6) == 0:
-            resultData.append([])
-            for y in range(401):
-                if (y % 6) == 0:
-                    resultData[x/6].append(_calculateFieldGradientPoint(simConf, pointData, x, y))
+      if (x % 4) == 0:
+        resultData.append([])
+        for y in range(401):
+          if (y % 4) == 0:
+            resultData[x/4].append(_calculateFieldGradientPoint(simConf, pointData, x, y))
     return resultData
 
 def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()]):

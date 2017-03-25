@@ -48,40 +48,44 @@ def drawForceArrows(canvasObj, pointData):
             canvasObj.create_line(xy0[0], xy0[1], xyP[0], xyP[1], fill="purple", arrow=LAST, arrowshape=(4,4,2), width=1)
 
 def getStrengthColour(strength, rangeFac=0.1):
-    if (strength <= -1.40 * rangeFac):
-        return "#0000ff"
-    elif (strength > -1.40 * rangeFac) and (strength <= -1.20 * rangeFac):
-        return "#1100ee"
-    elif (strength > -1.20 * rangeFac) and (strength <= -1.00 * rangeFac):
-        return "#2200dd"
-    elif (strength > -1.00 * rangeFac) and (strength <= -0.80 * rangeFac):
-        return "#3300cc"
-    elif (strength > -0.80 * rangeFac) and (strength <= -0.60 * rangeFac):
-        return "#4400bb"
-    elif (strength > -0.60 * rangeFac) and (strength <= -0.40 * rangeFac):
-        return "#5500aa"
-    elif (strength > -0.40 * rangeFac) and (strength <= -0.20 * rangeFac):
-        return "#660099"
-    elif (strength > -0.20 * rangeFac) and (strength <= -0.10 * rangeFac):
-        return "#770088"
-    elif (strength > -0.10 * rangeFac) and (strength <= 0.10 * rangeFac):
-        return "#000000"
-    elif (strength > 0.10 * rangeFac) and (strength <= 0.20 * rangeFac):
-        return "#880077"
-    elif (strength > 0.20 * rangeFac) and (strength <= 0.40 * rangeFac):
-        return "#990066"
-    elif (strength > 0.40 * rangeFac) and (strength <= 0.60 * rangeFac):
-        return "#aa0055"
-    elif (strength > 0.60 * rangeFac) and (strength <= 0.80 * rangeFac):
-        return "#bb0044"
-    elif (strength > 0.80 * rangeFac) and (strength <= 1.00 * rangeFac):
-        return "#cc0033"
-    elif (strength > 1.00 * rangeFac) and (strength <= 1.20 * rangeFac):
-        return "#dd0022"
-    elif (strength > 1.20 * rangeFac) and (strength <= 1.40 * rangeFac):
-        return "#ee0011"
-    elif (strength > 1.40 * rangeFac):
-        return "#ff0000"
+    if (strength <= -5.00 * rangeFac):
+        return "#0099d1"
+    elif (strength > -5.00 * rangeFac) and (strength <= -3.00 * rangeFac):
+        return "#00b1d1"
+    elif (strength > -3.00 * rangeFac) and (strength <= -2.50 * rangeFac):
+        return "#00c6d1"
+    elif (strength > -2.50 * rangeFac) and (strength <= -2.00 * rangeFac):
+        return "#00d1b1"
+    elif (strength > -2.00 * rangeFac) and (strength <= -1.50 * rangeFac):
+        return "#00d18e"
+    elif (strength > -1.50 * rangeFac) and (strength <= -1.00 * rangeFac):
+        return "#00d16b"  
+    elif (strength > -1.00 * rangeFac) and (strength <= -0.50 * rangeFac):
+        return "#00d13e"
+    elif (strength > -0.50 * rangeFac) and (strength <= -0.25 * rangeFac):
+        return "#22d100"
+    elif (strength > -0.25 * rangeFac) and (strength <= -0.05 * rangeFac):
+        return "#68d100"      
+    elif (strength > -0.05 * rangeFac) and (strength <= 0.05 * rangeFac):
+        return "#92d100"
+    elif (strength > 0.05 * rangeFac) and (strength <= 0.25 * rangeFac):
+        return "#9cd100" 
+    elif (strength > 0.25 * rangeFac) and (strength <= 0.50 * rangeFac):
+        return "#aed100"
+    elif (strength > 0.50 * rangeFac) and (strength <= 1.00 * rangeFac):
+        return "#bcd100"
+    elif (strength > 1.00 * rangeFac) and (strength <= 1.50 * rangeFac):
+        return "#d1c300"
+    elif (strength > 1.50 * rangeFac) and (strength <= 2.00 * rangeFac):
+        return "#d1ae00"
+    elif (strength > 2.00 * rangeFac) and (strength <= 2.50 * rangeFac):
+        return "#a87000"
+    elif (strength > 2.50 * rangeFac) and (strength <= 3.00 * rangeFac):
+        return "#a95200"
+    elif (strength > 3.00 * rangeFac) and (strength <= 5.00 * rangeFac):
+        return "#aa2500"
+    elif (strength > 5.00 * rangeFac):
+        return "#aa0000"
 
 def drawFieldVectors(canvasObj, calcRes):
     for x in range(len(calcRes)):
@@ -92,5 +96,5 @@ def drawFieldVectors(canvasObj, calcRes):
 def drawFieldGradient(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
-            fillS = getStrengthColour(calcRes[x][y][2])
-            canvasObj.create_rectangle(calcRes[x][y][0]-3, calcRes[x][y][1]-3, calcRes[x][y][0]+3, calcRes[x][y][1]+3, fill=fillS, width=0)
+            fillS = getStrengthColour(calcRes[x][y][2], 0.01)
+            canvasObj.create_rectangle(calcRes[x][y][0]-2, calcRes[x][y][1]-2, calcRes[x][y][0]+2, calcRes[x][y][1]+2, fill=fillS, width=0)
