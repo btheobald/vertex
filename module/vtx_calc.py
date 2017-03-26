@@ -59,7 +59,6 @@ def iterateDynamicSim(simConf, pointData=[vtx_com.PointCharge()]):
 def _calculateFieldVector(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
     vector = [0.0, 0.0]
 
-    net = 0
     Esum = 0
     vAngle = 0
 
@@ -79,16 +78,12 @@ def _calculateFieldVector(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
         vector[0] += E * xDist
         vector[1] += E * yDist
 
-    net = sqrt(vector[0] ** 2 + vector[1] ** 2)
-    if Esum < 0:
-        net = -net
-
     vAngle = atan2(vector[1], vector[0])
 
     vector[0] = x+10*cos(vAngle)
     vector[1] = y+10*sin(vAngle)
 
-    return [x, y, vector[0], vector[1], net, vAngle]
+    return [x, y, vector[0], vector[1], Esum, vAngle]
 
 def _calculateFieldGradientPoint(simConf, pointData=[vtx_com.PointCharge()], x=0, y=0):
     vector = [0.0, 0.0]
@@ -110,7 +105,7 @@ def _calculateFieldGradientPoint(simConf, pointData=[vtx_com.PointCharge()], x=0
 
         Esum += E
 
-    return [x, y, Esum*10]
+    return [x, y, Esum]
 
 def calculateFieldVectorMap(simConf, pointData=[vtx_com.PointCharge()]):
     resultData = []
@@ -144,12 +139,14 @@ def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()], step=3, nLin
           a = radians(i*(360/nLines))
           xR = pointData[n].pPos.get(0)+(pointData[n].pRadius*cos(a))
           yR = pointData[n].pPos.get(1)+(pointData[n].pRadius*sin(a))
+          strength = 0;
           for l in range(mSeg):
             # Continue line
-            resultData[i+offset].append(vtx_com.vecXY([xR,yR]))
+            resultData[i+offset].append([vtx_com.vecXY([xR,yR]),strength])
             res = _calculateFieldVector(simConf, pointData, xR, yR)
             xR = xR+(step*cos(res[5]))
             yR = yR+(step*sin(res[5]))
+            strength = res[4]
             if res[4] < -5:
               break
             if (res[0] < -800) or (res[0] > 1200):

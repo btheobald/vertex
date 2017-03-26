@@ -90,16 +90,25 @@ def getStrengthColour(strength, rangeFac=1):
 def drawFieldVectors(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
-            fillS = getStrengthColour(calcRes[x][y][4])
-            canvasObj.create_line(calcRes[x][y][0], calcRes[x][y][1], calcRes[x][y][2], calcRes[x][y][3], fill=fillS, arrow=LAST, arrowshape=(4, 4, 2), width=1)
+            fillS = getStrengthColour(calcRes[x][y][4], 0.005)
+            canvasObj.create_line(calcRes[x][y][0],
+                                  calcRes[x][y][1],
+                                  calcRes[x][y][2],
+                                  calcRes[x][y][3], fill=fillS, arrow=LAST, arrowshape=(4, 4, 2), width=1)
 
 def drawFieldGradient(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
-            fillS = getStrengthColour(calcRes[x][y][2], 0.05)
-            canvasObj.create_rectangle(calcRes[x][y][0]-2, calcRes[x][y][1]-2, calcRes[x][y][0]+2, calcRes[x][y][1]+2, fill=fillS, width=0)
+            fillS = getStrengthColour(calcRes[x][y][2], 0.005)
+            canvasObj.create_rectangle(calcRes[x][y][0]-2,
+                                       calcRes[x][y][1]-2,
+                                       calcRes[x][y][0]+2,
+                                       calcRes[x][y][1]+2, fill=fillS, width=0)
             
 def drawFieldLines(canvasObj, calcRes):
   for i in range(len(calcRes)):
     for l in range(len(calcRes[i])-1):
-      canvasObj.create_line(calcRes[i][l].get(0), calcRes[i][l].get(1), calcRes[i][l+1].get(0), calcRes[i][l+1].get(1), fill="darkred", width=1)
+      canvasObj.create_line(calcRes[i][l][0].get(0),
+                            calcRes[i][l][0].get(1),
+                            calcRes[i][l+1][0].get(0),
+                            calcRes[i][l+1][0].get(1), fill="grey", width=1)
