@@ -44,6 +44,7 @@ class vertexUI(Frame):
         }
 
         self.loaded = 0
+        self.init = 0
         self.uiPoints = []
         self.pointVal = {
             "pSelect" : StringVar(master),
@@ -123,6 +124,7 @@ class vertexUI(Frame):
         sel = self.checkParticleSelect(event.x, event.y)
         if sel != None:
             self.pointVal["pSelect"].set(sel)
+            self.updateCurrentUIPoint()
 
     def __initCanvas(self):
         """Add canvas to passed window"""
@@ -218,6 +220,8 @@ class vertexUI(Frame):
         self.DelButton = Button(self.pointConfig, text="Delete")
         self.DelButton.grid(column=2, columnspan=2, row=7, padx=5, pady=4, sticky="EW")
 
+        self.updateCurrentUIPoint()
+
     def updateConfig(self, conf={}):
         conf["rPerm"] = float(self.uiVal["rPerm"].get())
         conf["dTime"] = float(self.uiVal["dTime"].get())
@@ -225,7 +229,13 @@ class vertexUI(Frame):
         conf["sim"] = self.modes["sim"].get()
         conf["view"] = self.modes["view"].get()
 
-    def updatePoints(self, points=[]):
+    def updatePoints(self, points=[], force=False):
+        if(not force):
+            if self.modes["sim"].get() == 1:
+                self.updateCurrentUIPoint()
+            else:
+                self.updateActualPoint(points)
+
         if self.loaded == 1:
             self.loaded = 0
             for n in range(len(points)):
@@ -234,12 +244,11 @@ class vertexUI(Frame):
                 points.append(self.uiPoints[n]) # Add New
         else:
             self.uiPoints = deepcopy(points)
-        self.updatePointBoxes()
 
-    def updatePointBoxes(self):
-        if(len(self.uiPoints) > 0):
-            if(not(int(self.pointVal["pSelect"].get()) < len(self.uiPoints))):
-                self.pointVal["pSelect"].set(len(self.uiPoints)-1)
+    def updateCurrentUIPoint(self):
+        if (len(self.uiPoints) > 0):
+            if (not (int(self.pointVal["pSelect"].get()) < len(self.uiPoints))):
+                self.pointVal["pSelect"].set(len(self.uiPoints) - 1)
 
             current = self.uiPoints[int(self.pointVal["pSelect"].get())]
             self.pointVal["pMass"].set(current.pMass)
@@ -257,8 +266,20 @@ class vertexUI(Frame):
             self.pointVal["pForce"][0].set(current.pNetF.get(0))
             self.pointVal["pForce"][1].set(current.pNetF.get(1))
 
+    def updateActualPoint(self, points):
+        if(len(points) > 0):
+            tmp = vtx_com.PointCharge()
 
-    # Command functions
+            tmp.pMass = float(self.pointVal["pMass"].get())
+            tmp.pCharge = float(self.pointVal["pCharge"].get())
+            tmp.pPos.set([float(self.pointVal["pPos"][0].get()), float(self.pointVal["pPos"][1].get())])
+            tmp.pVel.set([float(self.pointVal["pVel"][0].get()), float(self.pointVal["pVel"][1].get())])
+            tmp.pAcc.set()
+            tmp.pNetF.set()
+
+            points[int(self.pointVal["pSelect"].get())] = tmp
+
+            # Command functions
     def __fNew(self):
         self.uiPoints = []
         self.loaded = 1
@@ -266,6 +287,8 @@ class vertexUI(Frame):
         self.modes["sim"].set(0)
 
     def __fOpen(self):
+        self.modes["sim"].set(0)
+
         self.filename = tkFileDialog.askopenfilename(**self.file_opt)
         if self.filename != '':
             data = vtx_file.loadJSONData(self.filename)
@@ -276,6 +299,8 @@ class vertexUI(Frame):
             self.modes["sim"].set(0)
 
             self.loaded = 1
+
+            self.updateCurrentUIPoint()
 
     def __fSaveAs(self):
         self.filename = tkFileDialog.asksaveasfilename(**self.file_opt)
