@@ -56,11 +56,16 @@ while True:
             backupMade = True
             print "backup done"
         vtx_calc.iterateDynamicSim(conf, points)
+        gui.updatePoints(points, force=True)
     else:
         if backupMade == True:
             points = deepcopy(pointsBackup)
-            print "backup loaded"
             backupMade = False
+        gui.updatePoints(points)
+
+    """UI Interaction Updates"""
+    conf["nPoints"] = len(points)
+    gui.updateConfig(conf)
 
     """Calculations and Draw"""
     if conf["view"] == 1: # Force Arrows
@@ -75,12 +80,8 @@ while True:
     elif conf["view"] == 4: # Field Gradient
         calcData=vtx_calc.calculateFieldGradient(conf, points)
         vtx_draw.drawFieldGradient(gui.display, calcData)
-    vtx_draw.drawPoints(gui.display, points)
 
-    """UI Interaction Updates"""
-    conf["nPoints"] = len(points)
-    gui.updatePoints(points)
-    gui.updateConfig(conf)
+    vtx_draw.drawPoints(gui.display, points)
 
     """Render and Update"""
     root.update_idletasks()
