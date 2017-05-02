@@ -48,7 +48,7 @@ class vertexUI(Frame):
         self.pointVal = {
             "pSelect" : StringVar(master),
             "pMass" : StringVar(master),
-            "pCharge" : 0,
+            "pCharge" : StringVar(master),
             "pPos" : [StringVar(master), StringVar(master)],
             "pVel" : [StringVar(master), StringVar(master)],
             "pAcc" : [StringVar(master), StringVar(master)],
@@ -163,7 +163,7 @@ class vertexUI(Frame):
 
         # POINT PANE
         self.pSelectLabel = Label(self.pointConfig, text="Selected Point")
-        self.pSelectEntry = Spinbox(self.pointConfig, from_=1, to=10, increment=1, textvariable=self.pointVal["pSelect"], width=4)
+        self.pSelectEntry = Spinbox(self.pointConfig, from_=0, to=9, increment=1, textvariable=self.pointVal["pSelect"], width=4)
         self.pSelectLabel.grid(column=0, columnspan=2, row=0, padx=10, pady=4)
         self.pSelectEntry.grid(column=2, columnspan=2, row=0, padx=5, pady=4, sticky="E")
 
@@ -205,11 +205,11 @@ class vertexUI(Frame):
         self.pAccYEntry.grid(column=3, row=5, pady=4, sticky="E")
 
         self.pForXLabel = Label(self.pointConfig, text="fX")
-        self.pForXEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][0], width=7)
+        self.pForXEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pForce"][0], width=7)
         self.pForXLabel.grid(column=0, row=6, padx=5, pady=4, sticky="W")
         self.pForXEntry.grid(column=1, row=6, pady=4, sticky="E")
         self.pForYLabel = Label(self.pointConfig, text="fY")
-        self.pForYEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][1], width=7)
+        self.pForYEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pForce"][1], width=7)
         self.pForYLabel.grid(column=2, row=6, padx=5, pady=4, sticky="W")
         self.pForYEntry.grid(column=3, row=6, pady=4, sticky="E")
 
@@ -234,9 +234,29 @@ class vertexUI(Frame):
                 points.append(self.uiPoints[n]) # Add New
         else:
             self.uiPoints = deepcopy(points)
+        self.updatePointBoxes()
 
     def updatePointBoxes(self):
-        current = self.uiPoints()
+        if(len(self.uiPoints) > 0):
+            if(not(int(self.pointVal["pSelect"].get()) < len(self.uiPoints))):
+                self.pointVal["pSelect"].set(len(self.uiPoints)-1)
+
+            current = self.uiPoints[int(self.pointVal["pSelect"].get())]
+            self.pointVal["pMass"].set(current.pMass)
+            self.pointVal["pCharge"].set(current.pCharge)
+
+            self.pointVal["pPos"][0].set(current.pPos.get(0))
+            self.pointVal["pPos"][1].set(current.pPos.get(1))
+
+            self.pointVal["pVel"][0].set(current.pVel.get(0))
+            self.pointVal["pVel"][1].set(current.pVel.get(1))
+
+            self.pointVal["pAcc"][0].set(current.pAcc.get(0))
+            self.pointVal["pAcc"][1].set(current.pAcc.get(1))
+
+            self.pointVal["pForce"][0].set(current.pNetF.get(0))
+            self.pointVal["pForce"][1].set(current.pNetF.get(1))
+
 
     # Command functions
     def __fNew(self):
