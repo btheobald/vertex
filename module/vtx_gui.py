@@ -107,9 +107,27 @@ class vertexUI(Frame):
 
         self.master.config(menu=self.menubar)
 
+    def checkParticleSelect(self, mX, mY):
+        for n in range(len(self.uiPoints)):
+            tmp = self.uiPoints[n]
+            # X Check
+            if (not(mX > tmp.pPos.get(0) + tmp.pRadius or mX < tmp.pPos.get(0) - tmp.pRadius)):
+                # Y Check
+                if (not (mY > tmp.pPos.get(1) + tmp.pRadius or mY < tmp.pPos.get(1) - tmp.pRadius)):
+                    print "clicked point ", n
+                    return n
+
+
+    def canvasClick(self, event):
+        print "click", event.x, event.y
+        sel = self.checkParticleSelect(event.x, event.y)
+        if sel != None:
+            self.pointVal["pSelect"].set(sel)
+
     def __initCanvas(self):
         """Add canvas to passed window"""
         self.display = Canvas(self, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
+        self.display.bind("<Button-1>", self.canvasClick)
         self.display.grid(row=0, column=0, rowspan=2)
         return self.display
 
@@ -216,6 +234,9 @@ class vertexUI(Frame):
                 points.append(self.uiPoints[n]) # Add New
         else:
             self.uiPoints = deepcopy(points)
+
+    def updatePointBoxes(self):
+        current = self.uiPoints()
 
     # Command functions
     def __fNew(self):
