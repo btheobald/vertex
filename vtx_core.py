@@ -10,6 +10,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 # EXTERNAL LIBRARIES
 from Tkinter import *
 from time import sleep
+from time import time
 from copy import deepcopy
 
 # INTERNAL MODULES
@@ -23,18 +24,26 @@ conf = {
     "rPerm":0.10,
     "dTime":1.00,
     "nPoints":0,
+    "fpsc":0,
     "sim":0,
     "view":0
 }
 
 """Init of point set"""
 points = []
+"""State var"""
+init = 0
 """Backup Store"""
 pointsBackup = list(points)
 backupMade = False
 
 """Data store for field vector / line calculation results"""
 calcData = None
+
+"""FPS counter var"""
+currentInterval = time()
+framesInInterval = 0
+currentFPS = 0
 
 """Get root window handle"""
 root = Tk()
@@ -50,52 +59,75 @@ def windowExit():
     shouldClose = True
 root.protocol("WM_DELETE_WINDOW", windowExit)
 
-check = 0
-
 """Main program loop"""
 while not shouldClose:
     """Small delay for persistence"""
-    sleep(0.0001)
     gui.display.delete(ALL)
 
     """Simulation Mode"""
     if conf["sim"] == 1:
-        check = 1
+        """Dynamic"""
+        init = 1
         if backupMade == False:
+            """Make initial points backup"""
             pointsBackup = deepcopy(points)
             backupMade = True
             print "backup done"
+        """Iterate sim"""
         vtx_calc.iterateDynamicSim(conf, points)
+        """Update gui points store"""
         gui.updatePoints(dyn=True, points=points)
     else:
-        if check == 1:
+        """Static"""
+        if init == 1:
+            """When first switched, update gui store with backup"""
             gui.updatePoints(dyn=True, points=pointsBackup)
-            check = 0
+            init = 0
 
         if backupMade == True:
+            """Update sim store from backup"""
             points = deepcopy(pointsBackup)
             backupMade = False
+        """Update gui points store"""
         gui.updatePoints(dyn=False, points=points)
+
+    """Modes selections"""
+    if conf["view"] == 1: # Force Arrows
+        """Force arrows"""
+        vtx_calc.calculateForces(conf, points)
+        vtx_draw.drawForceArrows(gui.display, points)
+    elif conf["view"] == 2: # Field Vectors
+        """Field vector map"""
+        calcData=vtx_calc.calculateFieldVectorMap(conf, points)
+        vtx_draw.drawFieldVectors(gui.display, calcData)
+    elif conf["view"] == 3: # Field Lines
+        """Field lines"""
+        calcData=vtx_calc.calculateFieldLines(conf, points)
+        vtx_draw.drawFieldLines(gui.display, calcData)
+    elif conf["view"] == 4: # Field Gradient
+        """Field gradient"""
+        calcData=vtx_calc.calculateFieldGradient(conf, points)
+        vtx_draw.drawFieldGradient(gui.display, calcData)
+
+    """Draw points"""
+    vtx_draw.drawPoints(gui.display, points)
+
+    if conf["fpsc"]:
+        """FPS counter"""
+        if time() > (currentInterval + 2):
+            currentInterval = time()
+            currentFPS = (framesInInterval + 1) / 2
+            if (currentFPS > 60):
+                currentFPS = 60
+            framesInInterval = 0
+        else:
+            framesInInterval += 1
+        """Render FPS counter"""
+        vtx_draw.drawFPSCounter(gui.display, currentFPS)
 
     """UI Interaction Updates"""
     conf["nPoints"] = len(points)
     gui.updateConfig(conf)
-
-    """Calculations and Draw"""
-    if conf["view"] == 1: # Force Arrows
-        vtx_calc.calculateForces(conf, points)
-        vtx_draw.drawForceArrows(gui.display, points)
-    elif conf["view"] == 2: # Field Vectors
-        calcData=vtx_calc.calculateFieldVectorMap(conf, points)
-        vtx_draw.drawFieldVectors(gui.display, calcData)
-    elif conf["view"] == 3: # Field Lines
-        calcData=vtx_calc.calculateFieldLines(conf, points)
-        vtx_draw.drawFieldLines(gui.display, calcData)
-    elif conf["view"] == 4: # Field Gradient
-        calcData=vtx_calc.calculateFieldGradient(conf, points)
-        vtx_draw.drawFieldGradient(gui.display, calcData)
-
-    vtx_draw.drawPoints(gui.display, points)
 
     """Render and Update"""
     root.update_idletasks()

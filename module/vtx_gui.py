@@ -35,7 +35,7 @@ class vertexUI(Frame):
         # Mode variables
         self.modes = {
             "sim" : IntVar(master),
-            "view" : IntVar(master)
+            "view" : IntVar(master),
         }
         self.uiVal = {
             "dTime" : StringVar(master),
@@ -43,6 +43,7 @@ class vertexUI(Frame):
             "nPoints" : StringVar(master)
         }
 
+        self.fpsCtr = BooleanVar(master)
         self.paused = BooleanVar(master)
         self.loaded = 0
         self.init = 0
@@ -92,7 +93,7 @@ class vertexUI(Frame):
         for label, val in VIEWMODES:
             view.add_radiobutton(label=label, value=val, variable=self.modes["view"])
         view.add_separator()
-        view.add_checkbutton(label="FPS Counter")
+        view.add_checkbutton(label="FPS Counter", variable=self.fpsCtr)
 
         mode = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Mode", menu=mode)
@@ -229,6 +230,7 @@ class vertexUI(Frame):
         if (self.paused.get()):
             conf["dTime"] = 0
 
+        conf["fpsc"] = self.fpsCtr.get()
         self.uiVal["nPoints"].set(str(conf["nPoints"]))
         conf["sim"] = self.modes["sim"].get()
         conf["view"] = self.modes["view"].get()

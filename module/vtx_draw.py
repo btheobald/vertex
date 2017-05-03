@@ -114,3 +114,6 @@ def drawFieldLines(canvasObj, calcRes):
                             calcRes[i][l][0].get(1),
                             calcRes[i][l+1][0].get(0),
                             calcRes[i][l+1][0].get(1), fill="grey", width=1)
+
+def drawFPSCounter(canvasObj, fps):
+  canvasObj.create_text(2, 0, anchor=NW, text="FPS:"+str(fps), fill="white", font=("Consolas","10","bold"))
