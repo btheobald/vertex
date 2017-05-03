@@ -47,7 +47,7 @@ def drawForceArrows(canvasObj, pointData):
 
             canvasObj.create_line(xy0[0], xy0[1], xyP[0], xyP[1], fill="purple", arrow=LAST, arrowshape=(4,4,2), width=1)
 
-def getStrengthColour(strength, rangeFac=1):
+def getStrengthColour(strength, rangeFac=1.0):
     if (strength <= -5.00 * rangeFac):
         return "#0099d1"
     elif (strength > -5.00 * rangeFac) and (strength <= -3.00 * rangeFac):
@@ -90,6 +90,7 @@ def getStrengthColour(strength, rangeFac=1):
 def drawFieldVectors(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
+            # noinspection PyTypeChecker
             fillS = getStrengthColour(calcRes[x][y][4], 0.005)
             canvasObj.create_line(calcRes[x][y][0],
                                   calcRes[x][y][1],
@@ -99,6 +100,7 @@ def drawFieldVectors(canvasObj, calcRes):
 def drawFieldGradient(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
+            # noinspection PyTypeChecker
             fillS = getStrengthColour(calcRes[x][y][2], 0.005)
             canvasObj.create_rectangle(calcRes[x][y][0]-2,
                                        calcRes[x][y][1]-2,

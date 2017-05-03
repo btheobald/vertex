@@ -50,7 +50,7 @@ def windowExit():
     shouldClose = True
 root.protocol("WM_DELETE_WINDOW", windowExit)
 
-check = 0;
+check = 0
 
 """Main program loop"""
 while not shouldClose:
@@ -70,7 +70,7 @@ while not shouldClose:
     else:
         if check == 1:
             gui.updatePoints(dyn=True, points=pointsBackup)
-            check = 0;
+            check = 0
 
         if backupMade == True:
             points = deepcopy(pointsBackup)

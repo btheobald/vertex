@@ -232,7 +232,7 @@ class vertexUI(Frame):
     def updatePoints(self, dyn, points=[]):
         if(dyn):
             self.updateCurrentUIPoint()
-            self.init = 1;
+            self.init = 1
         else:
             self.updateActualPoint(points)
             if (self.init == 1):
