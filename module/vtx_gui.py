@@ -13,6 +13,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 
 from Tkinter import *
 from copy import deepcopy
+from random import random
 import tkFileDialog
 
 from module import vtx_com
@@ -215,12 +216,10 @@ class vertexUI(Frame):
         self.pForYEntry = Entry(self.pointConfig, state=DISABLED, textvariable=self.pointVal["pForce"][1], width=10)
         self.pForYEntry.grid(column=2, row=7, pady=3, sticky="E")
 
-        self.pNewButton = Button(self.pointConfig, text="New")
-        self.pNewButton.grid(column=0, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
-        self.pDelButton = Button(self.pointConfig, text="Delete")
-        self.pDelButton.grid(column=1, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
-        self.pRandButton = Button(self.pointConfig, text="Random")
-        self.pRandButton.grid(column=2, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
+        self.pNewButton = Button(self.pointConfig, text="New", command=self.__sRandomPoint)
+        self.pNewButton.grid(column=0, columnspan=2, row=8, padx=5, pady=3, sticky="EW")
+        self.pDelButton = Button(self.pointConfig, text="Delete", command=self.__sDeletePoint)
+        self.pDelButton.grid(column=2, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
 
         self.updateCurrentUIPoint()
 
@@ -247,18 +246,30 @@ class vertexUI(Frame):
             self.pVelYEntry.configure(state=NORMAL)
 
     def updateConfig(self, conf={}):
-        conf["rPerm"] = float(self.uiVal["rPerm"].get())
+        try:
+            conv = float(self.uiVal["rPerm"].get())
+            if conv <= 0:
+                raise ValueError('Value cannot be <= 0')
+            conf["rPerm"] = conv
+        except:
+            conf["rPerm"] = 1
 
-        conf["dTime"] = float(self.uiVal["dTime"].get())
         if (self.paused.get()):
             conf["dTime"] = 0
+        else:
+            try:
+                conv = float(self.uiVal["dTime"].get())
+                conf["dTime"] = conv
+            except:
+                conf["dTime"] = 0
 
-        conf["fpsc"] = self.fpsCtr.get()
         self.uiVal["nPoints"].set(str(conf["nPoints"]))
+        conf["fpsc"] = self.fpsCtr.get()
         conf["sim"] = self.modes["sim"].get()
+        conf["view"] = self.modes["view"].get()
+
         """Blank/Allow boxes"""
         self.updateEditableBoxes(conf["sim"])
-        conf["view"] = self.modes["view"].get()
 
     def updatePoints(self, dyn, points=[]):
         if(dyn):
@@ -307,12 +318,26 @@ class vertexUI(Frame):
 
             try:
                 tmp.pMass = float(self.pointVal["pMass"].get())
+                if(tmp.pMass <= 0):
+                    raise ValueError('Value cannot be <= 0')
             except ValueError:
-                tmp.pMass = 1
+                tmp.pMass = 1.0
 
-            tmp.pCharge = float(self.pointVal["pCharge"].get())
-            tmp.pPos.set([float(self.pointVal["pPos"][0].get()), float(self.pointVal["pPos"][1].get())])
-            tmp.pVel.set([float(self.pointVal["pVel"][0].get()), float(self.pointVal["pVel"][1].get())])
+            try:
+                tmp.pCharge = float(self.pointVal["pCharge"].get())
+            except ValueError:
+                tmp.pCharge = 0
+
+            try:
+                tmp.pPos.set([float(self.pointVal["pPos"][0].get()), float(self.pointVal["pPos"][1].get())])
+            except ValueError:
+                tmp.pPos.set([200.0,200.0])
+
+            try:
+                tmp.pVel.set([float(self.pointVal["pVel"][0].get()), float(self.pointVal["pVel"][1].get())])
+            except ValueError:
+                tmp.pVel.set([0, 0])
+
             tmp.pAcc.set()
             tmp.pNetF.set()
 
@@ -324,6 +349,7 @@ class vertexUI(Frame):
         self.loaded = 1
         self.filename = ''
         self.modes["sim"].set(1)
+        self.pointVal["pSelect"].set(0)
         self.updateCurrentUIPoint()
         self.modes["sim"].set(10)
 
@@ -339,6 +365,8 @@ class vertexUI(Frame):
             self.uiVal["dTime"].set(data["save"]["config"]["dTime"])
             self.modes["sim"].set(0)
 
+            self.pointVal["pSelect"].set(0)
+
             self.loaded = 1
 
             self.updateCurrentUIPoint()
@@ -353,3 +381,17 @@ class vertexUI(Frame):
             self.filename = tkFileDialog.asksaveasfilename(**self.file_opt)
         if self.filename != '':
             vtx_file.saveJSONData(self.filename, self.uiPoints, self.uiVal)
+
+    def __sDeletePoint(self):
+        self.uiPoints.pop(int(self.pointVal["pSelect"].get()))
+
+        self.loaded = 1
+        self.updateCurrentUIPoint()
+
+    def __sRandomPoint(self):
+        self.uiPoints.append(vtx_com.PointCharge(_m=1.0, _c=(random()*2)-1, _p=[random()*400, random()*400]))
+
+        #TODO: Select new body after creation.
+
+        self.loaded = 1
+        self.updateCurrentUIPoint()
