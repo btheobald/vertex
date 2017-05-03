@@ -44,6 +44,9 @@ def calculateForces(simConf, pointData=[vtx_com.PointCharge()]):
 
 def iterateDynamicSim(simConf, pointData=[vtx_com.PointCharge()]):
     """Perform leapfrog integration of simulation at time step."""
+    # TODO: collisions
+    calculateForces(simConf, pointData) # a
+
     for n in range(len(pointData)): # 1/2v
         pointData[n].updateVel(simConf["dTime"]/2)
 

@@ -84,7 +84,7 @@ class vertexUI(Frame):
         file.add_command(label="Save", command=self.__fSave)
         file.add_command(label="Save As", command=self.__fSaveAs)
         file.add_separator()
-        file.add_command(label="Exit")
+        file.add_command(label="Exit", command=self.quit())
 
         view = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="View", menu=view)
@@ -274,7 +274,11 @@ class vertexUI(Frame):
         if(len(points) > 0):
             tmp = vtx_com.PointCharge()
 
-            tmp.pMass = float(self.pointVal["pMass"].get())
+            try:
+                tmp.pMass = float(self.pointVal["pMass"].get())
+            except ValueError:
+                tmp.pMass = 1
+
             tmp.pCharge = float(self.pointVal["pCharge"].get())
             tmp.pPos.set([float(self.pointVal["pPos"][0].get()), float(self.pointVal["pPos"][1].get())])
             tmp.pVel.set([float(self.pointVal["pVel"][0].get()), float(self.pointVal["pVel"][1].get())])
