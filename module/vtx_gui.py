@@ -229,21 +229,25 @@ class vertexUI(Frame):
         conf["sim"] = self.modes["sim"].get()
         conf["view"] = self.modes["view"].get()
 
-    def updatePoints(self, points=[], force=False):
-        if(not force):
-            if self.modes["sim"].get() == 1:
+    def updatePoints(self, dyn, points=[]):
+        if(dyn):
+            self.updateCurrentUIPoint()
+            self.init = 1;
+        else:
+            self.updateActualPoint(points)
+            if (self.init == 1):
+                self.init = 0
                 self.updateCurrentUIPoint()
-            else:
-                self.updateActualPoint(points)
 
         if self.loaded == 1:
             self.loaded = 0
             for n in range(len(points)):
-                points.pop() # Remove existing
+                points.pop()  # Remove existing
             for n in range(len(self.uiPoints)):
-                points.append(self.uiPoints[n]) # Add New
+                points.append(self.uiPoints[n])  # Add New
         else:
             self.uiPoints = deepcopy(points)
+
 
     def updateCurrentUIPoint(self):
         if (len(self.uiPoints) > 0):

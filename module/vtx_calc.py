@@ -127,7 +127,7 @@ def calculateFieldGradient(simConf, pointData=[vtx_com.PointCharge()]):
             resultData[x/4].append(_calculateFieldGradientPoint(simConf, pointData, x, y))
     return resultData
 
-def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()], step=3, nLines=20, mSeg=600):
+def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()], step=4, nLines=12, mSeg=300):
     resultData = []
     offset = 0
     for n in range(len(pointData)):
@@ -149,9 +149,9 @@ def calculateFieldLines(simConf, pointData=[vtx_com.PointCharge()], step=3, nLin
             strength = res[4]
             if res[4] < -5:
               break
-            if (res[0] < -800) or (res[0] > 1200):
+            if (res[0] < -400) or (res[0] > 800):
               break
-            if (res[1] < -800) or (res[1] > 1200):
+            if (res[1] < -400) or (res[1] > 800):
               break
         offset+=nLines
     return resultData

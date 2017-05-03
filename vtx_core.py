@@ -43,25 +43,39 @@ root.resizable(width=False, height=False)
 gui = vtx_gui.vertexUI(root)
 gui.pack()
 
+# Stop while on exit, prevent exception
+shouldClose = False
+def windowExit():
+    global shouldClose
+    shouldClose = True
+root.protocol("WM_DELETE_WINDOW", windowExit)
+
+check = 0;
+
 """Main program loop"""
-while True:
+while not shouldClose:
     """Small delay for persistence"""
     sleep(0.0001)
     gui.display.delete(ALL)
 
     """Simulation Mode"""
     if conf["sim"] == 1:
+        check = 1
         if backupMade == False:
             pointsBackup = deepcopy(points)
             backupMade = True
             print "backup done"
         vtx_calc.iterateDynamicSim(conf, points)
-        gui.updatePoints(points, force=True)
+        gui.updatePoints(dyn=True, points=points)
     else:
+        if check == 1:
+            gui.updatePoints(dyn=True, points=pointsBackup)
+            check = 0;
+
         if backupMade == True:
             points = deepcopy(pointsBackup)
             backupMade = False
-        gui.updatePoints(points)
+        gui.updatePoints(dyn=False, points=points)
 
     """UI Interaction Updates"""
     conf["nPoints"] = len(points)
