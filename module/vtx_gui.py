@@ -43,6 +43,7 @@ class vertexUI(Frame):
             "nPoints" : StringVar(master)
         }
 
+        self.paused = BooleanVar(master)
         self.loaded = 0
         self.init = 0
         self.uiPoints = []
@@ -91,14 +92,13 @@ class vertexUI(Frame):
         for label, val in VIEWMODES:
             view.add_radiobutton(label=label, value=val, variable=self.modes["view"])
         view.add_separator()
-        view.add_checkbutton(label="Origin")
-        view.add_checkbutton(label="Charges")
         view.add_checkbutton(label="FPS Counter")
 
         mode = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Mode", menu=mode)
         for label, val in SIMMODES:
             mode.add_radiobutton(label=label, value=val, variable=self.modes["sim"])
+        mode.add_checkbutton(label="Paused", variable=self.paused)
 
         about = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="About", menu=about)
@@ -224,7 +224,11 @@ class vertexUI(Frame):
 
     def updateConfig(self, conf={}):
         conf["rPerm"] = float(self.uiVal["rPerm"].get())
+
         conf["dTime"] = float(self.uiVal["dTime"].get())
+        if (self.paused.get()):
+            conf["dTime"] = 0
+
         self.uiVal["nPoints"].set(str(conf["nPoints"]))
         conf["sim"] = self.modes["sim"].get()
         conf["view"] = self.modes["view"].get()
