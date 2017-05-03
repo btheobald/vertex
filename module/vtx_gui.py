@@ -164,64 +164,87 @@ class vertexUI(Frame):
         self.nPointsLabel.grid(column=0, row=2, padx=10, pady=4, sticky="W")
         self.nPointsEntry.grid(column=1, columnspan=2, row=2, padx=5, pady=5, sticky="E")
 
+        self.simPause = Checkbutton(self.simConfig, text="Paused", variable=self.paused)
+        self.simPause.grid(column=3, row=0, rowspan=3)
+
         # POINT PANE
-        self.pSelectLabel = Label(self.pointConfig, text="Selected Point")
-        self.pSelectEntry = Spinbox(self.pointConfig, from_=0, to=9, increment=1, textvariable=self.pointVal["pSelect"], width=4)
-        self.pSelectLabel.grid(column=0, columnspan=2, row=0, padx=10, pady=4)
-        self.pSelectEntry.grid(column=2, columnspan=2, row=0, padx=5, pady=4, sticky="E")
+        self.pSelectLabel = Label(self.pointConfig, text="Selected")
+        self.pSelectEntry = Spinbox(self.pointConfig, from_=0, to=9, increment=1, textvariable=self.pointVal["pSelect"], width=16)
+        self.pSelectLabel.grid(column=0, columnspan=2, padx=5, row=0, pady=4, sticky="W")
+        self.pSelectEntry.grid(column=1, columnspan=2, row=0, pady=3, sticky="WE")
+        self.pMassLabel = Label(self.pointConfig, text="Mass")
+        self.pMassEntry = Spinbox(self.pointConfig, from_=0.1, to=100, increment=0.1, textvariable=self.pointVal["pMass"], width=16)
+        self.pMassLabel.grid(column=0, columnspan=2, padx=5, row=1, pady=4, sticky="W")
+        self.pMassEntry.grid(column=1, columnspan=2, row=1, pady=3, sticky="WE")
 
-        self.pMassLabel = Label(self.pointConfig, text="Mass (m)")
-        self.pMassEntry = Spinbox(self.pointConfig, from_=0.1, to=100, increment=0.1, textvariable=self.pointVal["pMass"], width=4)
-        self.pMassLabel.grid(column=0, columnspan=2, row=1, padx=10, pady=4)
-        self.pMassEntry.grid(column=2, columnspan=2, row=1, padx=5, pady=4, sticky="E")
+        self.pChargeLabel = Label(self.pointConfig, text="Charge")
+        self.pChargeEntry = Spinbox(self.pointConfig, from_=-1, to=1, increment=0.1, textvariable=self.pointVal["pCharge"], width=16)
+        self.pChargeLabel.grid(column=0, columnspan=2, padx=5, row=2, pady=4, sticky="W")
+        self.pChargeEntry.grid(column=1, columnspan=2, row=2, pady=3, sticky="WE")
 
-        self.pChargeLabel = Label(self.pointConfig, text="Charge (Q)")
-        self.pChargeEntry = Spinbox(self.pointConfig, from_=-1, to=1, increment=0.1, textvariable=self.pointVal["pCharge"], width=4)
-        self.pChargeLabel.grid(column=0, columnspan=2, row=2, padx=10, pady=4)
-        self.pChargeEntry.grid(column=2, columnspan=2, row=2, padx=5, pady=4, sticky="E")
+        self.xLabel = Label(self.pointConfig, text="X")
+        self.yLabel = Label(self.pointConfig, text="Y")
+        self.xLabel.grid(column=1, row=3)
+        self.yLabel.grid(column=2, row=3)
 
-        self.pPosXLabel = Label(self.pointConfig, text="pX")
-        self.pPosXEntry = Spinbox(self.pointConfig, from_=0, to=400, increment=0.1, textvariable=self.pointVal["pPos"][0], width=5)
-        self.pPosXLabel.grid(column=0, row=3, padx=5, pady=4, sticky="W")
-        self.pPosXEntry.grid(column=1, row=3, pady=4, sticky="E")
-        self.pPosYLabel = Label(self.pointConfig, text="pY")
-        self.pPosYEntry = Spinbox(self.pointConfig, from_=0, to=400, increment=0.1, textvariable=self.pointVal["pPos"][1], width=5)
-        self.pPosYLabel.grid(column=2, row=3, padx=5, pady=5, sticky="W")
-        self.pPosYEntry.grid(column=3, row=3, pady=5, sticky="E")
+        self.pPosLabel = Label(self.pointConfig, text="Position")
+        self.pPosXEntry = Spinbox(self.pointConfig, from_=0, to=400, increment=0.1, textvariable=self.pointVal["pPos"][0], width=8)
+        self.pPosLabel.grid(column=0, row=4, padx=5, pady=4, sticky="W")
+        self.pPosXEntry.grid(column=1, row=4, pady=3, sticky="E")
+        self.pPosYEntry = Spinbox(self.pointConfig, from_=0, to=400, increment=0.1, textvariable=self.pointVal["pPos"][1], width=8)
+        self.pPosYEntry.grid(column=2, row=4, pady=3, sticky="E")
 
-        self.pVelXLabel = Label(self.pointConfig, text="vX")
-        self.pVelXEntry = Spinbox(self.pointConfig, from_=-100, to=100, increment=0.1, textvariable=self.pointVal["pVel"][0], width=5)
-        self.pVelXLabel.grid(column=0, row=4, padx=5, pady=4, sticky="W")
-        self.pVelXEntry.grid(column=1, row=4, pady=4, sticky="E")
-        self.pVelYLabel = Label(self.pointConfig, text="vY")
-        self.pVelYEntry = Spinbox(self.pointConfig, from_=-100, to=100, increment=0.1, textvariable=self.pointVal["pVel"][1], width=5)
-        self.pVelYLabel.grid(column=2, row=4, padx=5, pady=4, sticky="W")
-        self.pVelYEntry.grid(column=3, row=4, pady=4, sticky="E")
+        self.pVelLabel = Label(self.pointConfig, text="Velocity")
+        self.pVelXEntry = Spinbox(self.pointConfig, from_=-100, to=100, increment=0.1, textvariable=self.pointVal["pVel"][0], width=8)
+        self.pVelLabel.grid(column=0, row=5, padx=5, pady=3, sticky="W")
+        self.pVelXEntry.grid(column=1, row=5, pady=3, sticky="E")
+        self.pVelYEntry = Spinbox(self.pointConfig, from_=-100, to=100, increment=0.1, textvariable=self.pointVal["pVel"][1], width=8)
+        self.pVelYEntry.grid(column=2, row=5, pady=3, sticky="E")
 
-        self.pAccXLabel = Label(self.pointConfig, text="aX")
-        self.pAccXEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][0], width=7)
-        self.pAccXLabel.grid(column=0, row=5, padx=5, pady=4, sticky="W")
-        self.pAccXEntry.grid(column=1, row=5, pady=4, sticky="E")
-        self.pAccYLabel = Label(self.pointConfig, text="aY")
-        self.pAccYEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pAcc"][1], width=7)
-        self.pAccYLabel.grid(column=2, row=5, padx=5, pady=4, sticky="W")
-        self.pAccYEntry.grid(column=3, row=5, pady=4, sticky="E")
+        self.pAccLabel = Label(self.pointConfig, text="Accel.")
+        self.pAccXEntry = Entry(self.pointConfig, state=DISABLED, textvariable=self.pointVal["pAcc"][0], width=10)
+        self.pAccLabel.grid(column=0, row=6, padx=5, pady=3, sticky="W")
+        self.pAccXEntry.grid(column=1, row=6, pady=3, sticky="E")
+        self.pAccYEntry = Entry(self.pointConfig, state=DISABLED, textvariable=self.pointVal["pAcc"][1], width=10)
+        self.pAccYEntry.grid(column=2, row=6, pady=3, sticky="E")
 
-        self.pForXLabel = Label(self.pointConfig, text="fX")
-        self.pForXEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pForce"][0], width=7)
-        self.pForXLabel.grid(column=0, row=6, padx=5, pady=4, sticky="W")
-        self.pForXEntry.grid(column=1, row=6, pady=4, sticky="E")
-        self.pForYLabel = Label(self.pointConfig, text="fY")
-        self.pForYEntry = Entry(self.pointConfig, state="readonly", textvariable=self.pointVal["pForce"][1], width=7)
-        self.pForYLabel.grid(column=2, row=6, padx=5, pady=4, sticky="W")
-        self.pForYEntry.grid(column=3, row=6, pady=4, sticky="E")
+        self.pForLabel = Label(self.pointConfig, text="Force")
+        self.pForXEntry = Entry(self.pointConfig, state=DISABLED, textvariable=self.pointVal["pForce"][0], width=10)
+        self.pForLabel.grid(column=0, row=7, padx=5, pady=3, sticky="W")
+        self.pForXEntry.grid(column=1, row=7, pady=3, sticky="E")
+        self.pForYEntry = Entry(self.pointConfig, state=DISABLED, textvariable=self.pointVal["pForce"][1], width=10)
+        self.pForYEntry.grid(column=2, row=7, pady=3, sticky="E")
 
-        self.NewButton = Button(self.pointConfig, text="New")
-        self.NewButton.grid(column=0, columnspan=2, row=7, padx=5, pady=4, sticky="EW")
-        self.DelButton = Button(self.pointConfig, text="Delete")
-        self.DelButton.grid(column=2, columnspan=2, row=7, padx=5, pady=4, sticky="EW")
+        self.pNewButton = Button(self.pointConfig, text="New")
+        self.pNewButton.grid(column=0, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
+        self.pDelButton = Button(self.pointConfig, text="Delete")
+        self.pDelButton.grid(column=1, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
+        self.pRandButton = Button(self.pointConfig, text="Random")
+        self.pRandButton.grid(column=2, columnspan=1, row=8, padx=5, pady=3, sticky="EW")
 
         self.updateCurrentUIPoint()
+
+    def updateEditableBoxes(self, dyn):
+        if dyn:
+            self.pMassEntry.configure(state=DISABLED)
+
+            self.pChargeEntry.configure(state=DISABLED)
+
+            self.pPosXEntry.configure(state=DISABLED)
+            self.pPosYEntry.configure(state=DISABLED)
+
+            self.pVelXEntry.configure(state=DISABLED)
+            self.pVelYEntry.configure(state=DISABLED)
+        else:
+            self.pMassEntry.configure(state=NORMAL)
+
+            self.pChargeEntry.configure(state=NORMAL)
+
+            self.pPosXEntry.configure(state=NORMAL)
+            self.pPosYEntry.configure(state=NORMAL)
+
+            self.pVelXEntry.configure(state=NORMAL)
+            self.pVelYEntry.configure(state=NORMAL)
 
     def updateConfig(self, conf={}):
         conf["rPerm"] = float(self.uiVal["rPerm"].get())
@@ -233,6 +256,8 @@ class vertexUI(Frame):
         conf["fpsc"] = self.fpsCtr.get()
         self.uiVal["nPoints"].set(str(conf["nPoints"]))
         conf["sim"] = self.modes["sim"].get()
+        """Blank/Allow boxes"""
+        self.updateEditableBoxes(conf["sim"])
         conf["view"] = self.modes["view"].get()
 
     def updatePoints(self, dyn, points=[]):
@@ -261,20 +286,20 @@ class vertexUI(Frame):
                 self.pointVal["pSelect"].set(len(self.uiPoints) - 1)
 
             current = self.uiPoints[int(self.pointVal["pSelect"].get())]
-            self.pointVal["pMass"].set(current.pMass)
-            self.pointVal["pCharge"].set(current.pCharge)
+            self.pointVal["pMass"].set(round(current.pMass,3))
+            self.pointVal["pCharge"].set(round(current.pCharge,3))
 
-            self.pointVal["pPos"][0].set(current.pPos.get(0))
-            self.pointVal["pPos"][1].set(current.pPos.get(1))
+            self.pointVal["pPos"][0].set(round(current.pPos.get(0),3))
+            self.pointVal["pPos"][1].set(round(current.pPos.get(1),3))
 
-            self.pointVal["pVel"][0].set(current.pVel.get(0))
-            self.pointVal["pVel"][1].set(current.pVel.get(1))
+            self.pointVal["pVel"][0].set(round(current.pVel.get(0),3))
+            self.pointVal["pVel"][1].set(round(current.pVel.get(1),3))
 
-            self.pointVal["pAcc"][0].set(current.pAcc.get(0))
-            self.pointVal["pAcc"][1].set(current.pAcc.get(1))
+            self.pointVal["pAcc"][0].set(round(current.pAcc.get(0),3))
+            self.pointVal["pAcc"][1].set(round(current.pAcc.get(1),3))
 
-            self.pointVal["pForce"][0].set(current.pNetF.get(0))
-            self.pointVal["pForce"][1].set(current.pNetF.get(1))
+            self.pointVal["pForce"][0].set(round(current.pNetF.get(0),3))
+            self.pointVal["pForce"][1].set(round(current.pNetF.get(1),3))
 
     def updateActualPoint(self, points):
         if(len(points) > 0):
@@ -298,7 +323,9 @@ class vertexUI(Frame):
         self.uiPoints = []
         self.loaded = 1
         self.filename = ''
-        self.modes["sim"].set(0)
+        self.modes["sim"].set(1)
+        self.updateCurrentUIPoint()
+        self.modes["sim"].set(10)
 
     def __fOpen(self):
         self.modes["sim"].set(0)
