@@ -15,6 +15,8 @@ from Tkinter import *
 from copy import deepcopy
 from random import random
 import tkFileDialog
+import os
+import pygame
 
 from module import vtx_com
 from module import vtx_file
@@ -130,8 +132,18 @@ class vertexUI(Frame):
 
     def __initCanvas(self):
         """Add canvas to passed window"""
-        self.display = Canvas(self, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
-        self.display.bind("<Button-1>", self.canvasClick)
+        #self.display = Canvas(self, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
+        self.display = Frame(self, width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
+        os.environ['SDL_WINDOWID'] = str(self.display.winfo_id())
+        os.environ['SDL_VIDEODRIVER'] = 'windib'
+
+        self.screen = pygame.display.set_mode((400, 400))
+        self.screen.fill(pygame.Color(0, 0, 0))
+
+        pygame.display.init()
+        pygame.display.update()
+
+        #self.display.bind("<Button-1>", self.canvasClick)
         self.display.grid(row=0, column=0, rowspan=2)
         return self.display
 

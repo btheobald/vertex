@@ -12,6 +12,8 @@ from Tkinter import *
 from time import sleep
 from time import time
 from copy import deepcopy
+import pygame
+import os
 
 # INTERNAL MODULES
 from module import vtx_calc
@@ -62,7 +64,8 @@ root.protocol("WM_DELETE_WINDOW", windowExit)
 """Main program loop"""
 while not shouldClose:
     """Small delay for persistence"""
-    gui.display.delete(ALL)
+    #gui.display.delete(ALL)
+    gui.screen.fill((0,0,0))
 
     """Simulation Mode"""
     if conf["sim"] == 1:
@@ -95,22 +98,22 @@ while not shouldClose:
     if conf["view"] == 1: # Force Arrows
         """Force arrows"""
         vtx_calc.calculateForces(conf, points)
-        vtx_draw.drawForceArrows(gui.display, points)
+        #vtx_draw.drawForceArrows(gui.display, points)
     elif conf["view"] == 2: # Field Vectors
         """Field vector map"""
         calcData=vtx_calc.calculateFieldVectorMap(conf, points)
-        vtx_draw.drawFieldVectors(gui.display, calcData)
+        #vtx_draw.drawFieldVectors(gui.display, calcData)
     elif conf["view"] == 3: # Field Lines
         """Field lines"""
         calcData=vtx_calc.calculateFieldLines(conf, points)
-        vtx_draw.drawFieldLines(gui.display, calcData)
+        #vtx_draw.drawFieldLines(gui.display, calcData)
     elif conf["view"] == 4: # Field Gradient
         """Field gradient"""
         calcData=vtx_calc.calculateFieldGradient(conf, points)
-        vtx_draw.drawFieldGradient(gui.display, calcData)
+        vtx_draw.drawFieldGradient(gui.screen, calcData)
 
     """Draw points"""
-    vtx_draw.drawPoints(gui.display, points)
+    vtx_draw.drawPoints(gui.screen, points, int(gui.pointVal["pSelect"].get()))
 
     if conf["fpsc"]:
         """FPS counter"""
@@ -130,5 +133,6 @@ while not shouldClose:
     gui.updateConfig(conf)
 
     """Render and Update"""
+    pygame.display.update()
     root.update_idletasks()
     root.update()

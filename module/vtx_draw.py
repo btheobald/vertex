@@ -11,6 +11,7 @@ Keep cyclic imports to minimum, ie write in a way where modules are not interlin
 from module import vtx_com
 from Tkinter import *
 from math import *
+import pygame
 
 # TODO: implement Tkinter draw functions based on data collected from calculation.
 
@@ -18,17 +19,22 @@ def _create_circle(canvas, cx, cy, r, **options):
     """Simplify the drawing of constant radius objects, pass on options"""
     canvas.create_oval(cx-r, cy-r, cx+r, cy+r, options)
 
-def drawPoints(canvasObj, pointData):
+def drawPoints(canvasObj, pointData, selected):
     """Draw all points provided in data to provided canvas."""
     for n in range(len(pointData)):
         if pointData[n].pCharge > 0:
-            fill = "orangeRed4"
+            fill = (255,25,25)
             line = "red"
         else:
-            fill = "deepSkyBlue3"
+            fill = (50,50,255)
             line = "cyan"
 
-        _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline=line, width=1)
+        pygame.draw.circle(canvasObj, fill, (trunc(pointData[n].pPos.get(0)), trunc(pointData[n].pPos.get(1))), int(pointData[n].pRadius))
+
+        #if n == selected:
+            #_create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius+2, fill=fill, outline="green", width=3)
+        #else:
+            #_create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline=line, width=1)
 
 def drawForceArrows(canvasObj, pointData):
     for n in range(len(pointData)):
@@ -102,10 +108,11 @@ def drawFieldGradient(canvasObj, calcRes):
         for y in range(len(calcRes[x])):
             # noinspection PyTypeChecker
             fillS = getStrengthColour(calcRes[x][y][2], 0.005)
-            canvasObj.create_rectangle(calcRes[x][y][0]-2,
+            """canvasObj.create_rectangle(calcRes[x][y][0]-2,
                                        calcRes[x][y][1]-2,
                                        calcRes[x][y][0]+2,
-                                       calcRes[x][y][1]+2, fill=fillS, width=0)
+                                       calcRes[x][y][1]+2, fill=fillS, width=0)"""
+            pygame.draw.rect(canvasObj, pygame.color.Color(fillS), (calcRes[x][y][0],calcRes[x][y][1],4,4))
             
 def drawFieldLines(canvasObj, calcRes):
   for i in range(len(calcRes)):
