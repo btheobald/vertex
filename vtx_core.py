@@ -110,7 +110,7 @@ while not shouldClose:
         vtx_draw.drawFieldGradient(gui.display, calcData)
 
     """Draw points"""
-    vtx_draw.drawPoints(gui.display, points)
+    vtx_draw.drawPoints(gui.display, points, int(gui.pointVal["pSelect"].get()))
 
     if conf["fpsc"]:
         """FPS counter"""

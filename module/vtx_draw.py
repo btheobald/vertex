@@ -18,7 +18,7 @@ def _create_circle(canvas, cx, cy, r, **options):
     """Simplify the drawing of constant radius objects, pass on options"""
     canvas.create_oval(cx-r, cy-r, cx+r, cy+r, options)
 
-def drawPoints(canvasObj, pointData):
+def drawPoints(canvasObj, pointData, selected):
     """Draw all points provided in data to provided canvas."""
     for n in range(len(pointData)):
         if pointData[n].pCharge > 0:
@@ -28,7 +28,10 @@ def drawPoints(canvasObj, pointData):
             fill = "deepSkyBlue3"
             line = "cyan"
 
-        _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline=line, width=1)
+        if n == selected:
+            _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius+1, fill=fill, outline="green", width=2)
+        else:
+            _create_circle(canvasObj, pointData[n].pPos.get(0), pointData[n].pPos.get(1), pointData[n].pRadius, fill=fill, outline=line, width=1)
 
 def drawForceArrows(canvasObj, pointData):
     for n in range(len(pointData)):
@@ -90,7 +93,6 @@ def getStrengthColour(strength, rangeFac=1.0):
 def drawFieldVectors(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
-            # noinspection PyTypeChecker
             fillS = getStrengthColour(calcRes[x][y][4], 0.005)
             canvasObj.create_line(calcRes[x][y][0],
                                   calcRes[x][y][1],
@@ -100,7 +102,6 @@ def drawFieldVectors(canvasObj, calcRes):
 def drawFieldGradient(canvasObj, calcRes):
     for x in range(len(calcRes)):
         for y in range(len(calcRes[x])):
-            # noinspection PyTypeChecker
             fillS = getStrengthColour(calcRes[x][y][2], 0.005)
             canvasObj.create_rectangle(calcRes[x][y][0]-2,
                                        calcRes[x][y][1]-2,
