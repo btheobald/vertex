@@ -141,6 +141,7 @@ class vertexUI(Frame):
         self.uiVal["nPoints"].set("0")
         self.modes["view"].set(0)
         self.modes["sim"].set(0)
+        self.pointVal["pSelect"].set("0")
 
     def __initPropertiesPane(self):
         """Add properties pane to window"""
@@ -170,9 +171,10 @@ class vertexUI(Frame):
 
         # POINT PANE
         self.pSelectLabel = Label(self.pointConfig, text="Selected")
-        self.pSelectEntry = Spinbox(self.pointConfig, from_=0, to=9, increment=1, textvariable=self.pointVal["pSelect"], width=16)
+        self.pSelectEntry = Entry(self.pointConfig, state=DISABLED, textvariable=self.pointVal["pSelect"], width=16)
         self.pSelectLabel.grid(column=0, columnspan=2, padx=5, row=0, pady=4, sticky="W")
         self.pSelectEntry.grid(column=1, columnspan=2, row=0, pady=3, sticky="WE")
+
         self.pMassLabel = Label(self.pointConfig, text="Mass")
         self.pMassEntry = Spinbox(self.pointConfig, from_=0.1, to=100, increment=0.1, textvariable=self.pointVal["pMass"], width=16)
         self.pMassLabel.grid(column=0, columnspan=2, padx=5, row=1, pady=4, sticky="W")
@@ -315,6 +317,15 @@ class vertexUI(Frame):
     def updateActualPoint(self, points):
         if(len(points) > 0):
             tmp = vtx_com.PointCharge()
+
+            try:
+                try:
+                    if points[int(self.pointVal["pSelect"].get())] == None:
+                        raise IndexError('Out of Bounds')
+                except ValueError:
+                    self.pointVal["pSelect"].set("0")
+            except IndexError:
+                self.pointVal["pSelect"].set("0")
 
             try:
                 tmp.pMass = float(self.pointVal["pMass"].get())
