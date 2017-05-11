@@ -102,8 +102,8 @@ class vertexUI(Frame):
             mode.add_radiobutton(label=label, value=val, variable=self.modes["sim"])
         mode.add_checkbutton(label="Paused", variable=self.paused)
 
-        about = Menu(self.menubar, tearoff=0)
-        self.menubar.add_command(label="Help")
+        #about = Menu(self.menubar, tearoff=0)
+        #self.menubar.add_command(label="Help")
 
         self.master.config(menu=self.menubar)
 
