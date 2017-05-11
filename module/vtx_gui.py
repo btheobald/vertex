@@ -87,7 +87,7 @@ class vertexUI(Frame):
         file.add_command(label="Save", command=self.__fSave)
         file.add_command(label="Save As", command=self.__fSaveAs)
         file.add_separator()
-        file.add_command(label="Exit", command=self.quit())
+        file.add_command(label="Exit", command=self.destroy)
 
         view = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="View", menu=view)
@@ -103,10 +103,7 @@ class vertexUI(Frame):
         mode.add_checkbutton(label="Paused", variable=self.paused)
 
         about = Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label="About", menu=about)
-        about.add_command(label="Help")
-        about.add_command(label="Debug Info")
-        about.add_command(label="About Vertex")
+        self.menubar.add_command(label="Help")
 
         self.master.config(menu=self.menubar)
 
@@ -117,12 +114,12 @@ class vertexUI(Frame):
             if (not(mX > tmp.pPos.get(0) + tmp.pRadius or mX < tmp.pPos.get(0) - tmp.pRadius)):
                 # Y Check
                 if (not (mY > tmp.pPos.get(1) + tmp.pRadius or mY < tmp.pPos.get(1) - tmp.pRadius)):
-                    print "clicked point ", n
+                    #print "clicked point ", n
                     return n
 
 
     def canvasClick(self, event):
-        print "click", event.x, event.y
+        #print "click", event.x, event.y
         sel = self.checkParticleSelect(event.x, event.y)
         if sel != None:
             self.pointVal["pSelect"].set(sel)
@@ -130,6 +127,7 @@ class vertexUI(Frame):
 
     def __initCanvas(self):
         """Add canvas to passed window"""
+
         self.display = Canvas(self, bg="black", width=400, height=400, relief=SUNKEN, bd=2, highlightthickness=0)
         self.display.bind("<Button-1>", self.canvasClick)
         self.display.grid(row=0, column=0, rowspan=2)

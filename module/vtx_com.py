@@ -49,7 +49,7 @@ class PointCharge:
 
         if jsonData != None:
             # Populate object with data from JSON DOM.
-            print jsonData
+            #print jsonData
             self.pMass = jsonData["mass"]
             self.pCharge = jsonData["charge"]
             self.pPos.set(jsonData["pos"])

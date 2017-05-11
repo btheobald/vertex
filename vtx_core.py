@@ -62,7 +62,10 @@ root.protocol("WM_DELETE_WINDOW", windowExit)
 """Main program loop"""
 while not shouldClose:
     """Small delay for persistence"""
-    gui.display.delete(ALL)
+    try:
+        gui.display.delete(ALL)
+    except TclError:
+        exit()
 
     """Simulation Mode"""
     if conf["sim"] == 1:
@@ -72,7 +75,7 @@ while not shouldClose:
             """Make initial points backup"""
             pointsBackup = deepcopy(points)
             backupMade = True
-            print "backup done"
+            #print "backup done"
         """Iterate sim"""
         vtx_calc.iterateDynamicSim(conf, points)
         """Update gui points store"""
