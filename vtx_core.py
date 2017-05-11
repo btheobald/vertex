@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 """
 Program core / startup module.
 
