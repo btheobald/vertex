@@ -391,6 +391,17 @@ class vertexUI(Frame):
         if self.filename != '':
             vtx_file.saveJSONData(self.filename, self.uiPoints, self.uiVal)
 
+    def rangeCheck(self):
+        for n in range(len(self.uiPoints)):
+            if (self.uiPoints[n].pPos.get(0) > 500) or (self.uiPoints[n].pPos.get(0) < -100) or \
+               (self.uiPoints[n].pPos.get(1) > 500) or (self.uiPoints[n].pPos.get(1) < -100):
+                self.uiPoints.pop(n)
+
+                self.loaded = 1
+                self.updateCurrentUIPoint()
+                break
+
+
     def __sDeletePoint(self):
         self.uiPoints.pop(int(self.pointVal["pSelect"].get()))
 

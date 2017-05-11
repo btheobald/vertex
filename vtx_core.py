@@ -69,6 +69,8 @@ while not shouldClose:
     except TclError:
         exit()
 
+    gui.rangeCheck()
+
     """Simulation Mode"""
     if conf["sim"] == 1:
         """Dynamic"""
